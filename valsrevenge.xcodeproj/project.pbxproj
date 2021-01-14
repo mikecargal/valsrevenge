@@ -59,13 +59,13 @@
 			isa = PBXGroup;
 			children = (
 				27D24BE325B0DED5008E6E44 /* AppDelegate.swift */,
+				27D24BF025B0DED6008E6E44 /* Assets.xcassets */,
 				27D24BE525B0DED6008E6E44 /* GameScene.sks */,
-				27FE0F5525B0F5600071F483 /* Player.swift */,
 				27D24BE925B0DED6008E6E44 /* GameScene.swift */,
 				27D24BEB25B0DED6008E6E44 /* GameViewController.swift */,
-				27D24BED25B0DED6008E6E44 /* Main.storyboard */,
-				27D24BF025B0DED6008E6E44 /* Assets.xcassets */,
 				27D24BF225B0DED6008E6E44 /* Info.plist */,
+				27D24BED25B0DED6008E6E44 /* Main.storyboard */,
+				27FE0F5525B0F5600071F483 /* Player.swift */,
 			);
 			path = valsrevenge;
 			sourceTree = "<group>";
