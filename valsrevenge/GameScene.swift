@@ -8,10 +8,12 @@
 import GameplayKit
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene{
     var entities = [GKEntity]()
     var graphs = [String: GKGraph]()
     private var player: Player?
+    
+    let margin: CGFloat = 20.0
     
     private var lastUpdateTime: TimeInterval = 0
 
@@ -22,6 +24,15 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         self.player = childNode(withName: "player") as? Player
         self.player?.move(.stop)
+        
+        self.setupCamera()
+    }
+
+    func setupCamera() {
+        guard let player = player else { return }
+        let distance = SKRange(constantValue: 0)
+        let playerConstraint = SKConstraint.distance(distance, to: player)
+        camera?.constraints = [playerConstraint]
     }
     
     func touchDown(atPoint pos: CGPoint) {
@@ -31,7 +42,7 @@ class GameScene: SKScene {
                 let direction = touchedNode.name?.replacingOccurrences(of: "controller_", with: "")
                 self.player?.move(Direction(rawValue: direction ?? "stop")!)
             } else if touchedNode.name == "button_attack" {
-                player?.attack()
+                self.player?.attack()
             }
         }
     }
@@ -88,5 +99,28 @@ class GameScene: SKScene {
         }
         
         self.lastUpdateTime = currentTime
+    }
+    
+    override func didFinishUpdate() {
+        self.updateControllerLocation()
+    }
+    
+    func updateControllerLocation() {
+        let controller = childNode(withName: "//controller")
+        controller?.position = CGPoint(
+            x: viewLeft +
+                self.margin +
+                insets.left,
+            y: viewBottom +
+                self.margin +
+                insets.bottom)
+        let attackButton = childNode(withName: "//attackButton")
+        attackButton?.position = CGPoint(
+            x: viewRight -
+                self.margin -
+                insets.right,
+            y: viewBottom +
+                self.margin +
+                insets.bottom)
     }
 }
