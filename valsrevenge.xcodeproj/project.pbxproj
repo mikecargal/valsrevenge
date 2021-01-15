@@ -11,6 +11,8 @@
 		2714E19925B1E08E0038EF9B /* AttackButton.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2714E19825B1E08E0038EF9B /* AttackButton.sks */; };
 		2714E19C25B1E5BA0038EF9B /* SKScene+viewProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2714E19B25B1E5BA0038EF9B /* SKScene+viewProperties.swift */; };
 		2714E19F25B1F1A00038EF9B /* GameScene+ViewUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2714E19E25B1F1A00038EF9B /* GameScene+ViewUpdates.swift */; };
+		2714E1A325B1F5350038EF9B /* MainTileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2714E1A225B1F5350038EF9B /* MainTileSet.sks */; };
+		2714E1A625B2091F0038EF9B /* SKTileMapNode+Physics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2714E1A525B2091F0038EF9B /* SKTileMapNode+Physics.swift */; };
 		27D24BE425B0DED5008E6E44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D24BE325B0DED5008E6E44 /* AppDelegate.swift */; };
 		27D24BE625B0DED6008E6E44 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 27D24BE525B0DED6008E6E44 /* GameScene.sks */; };
 		27D24BEA25B0DED6008E6E44 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D24BE925B0DED6008E6E44 /* GameScene.swift */; };
@@ -25,6 +27,8 @@
 		2714E19825B1E08E0038EF9B /* AttackButton.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = AttackButton.sks; sourceTree = "<group>"; };
 		2714E19B25B1E5BA0038EF9B /* SKScene+viewProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKScene+viewProperties.swift"; sourceTree = "<group>"; };
 		2714E19E25B1F1A00038EF9B /* GameScene+ViewUpdates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+ViewUpdates.swift"; sourceTree = "<group>"; };
+		2714E1A225B1F5350038EF9B /* MainTileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainTileSet.sks; sourceTree = "<group>"; };
+		2714E1A525B2091F0038EF9B /* SKTileMapNode+Physics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKTileMapNode+Physics.swift"; sourceTree = "<group>"; };
 		27D24BE025B0DED5008E6E44 /* valsrevenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = valsrevenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D24BE325B0DED5008E6E44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27D24BE525B0DED6008E6E44 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -68,6 +72,8 @@
 			children = (
 				27D24BE325B0DED5008E6E44 /* AppDelegate.swift */,
 				27D24BF025B0DED6008E6E44 /* Assets.xcassets */,
+				2714E1A225B1F5350038EF9B /* MainTileSet.sks */,
+				2714E1A525B2091F0038EF9B /* SKTileMapNode+Physics.swift */,
 				2714E19825B1E08E0038EF9B /* AttackButton.sks */,
 				2714E19525B1DF8B0038EF9B /* Controller.sks */,
 				27D24BE525B0DED6008E6E44 /* GameScene.sks */,
@@ -140,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				27D24BEF25B0DED6008E6E44 /* Main.storyboard in Resources */,
+				2714E1A325B1F5350038EF9B /* MainTileSet.sks in Resources */,
 				2714E19625B1DF8B0038EF9B /* Controller.sks in Resources */,
 				27D24BE625B0DED6008E6E44 /* GameScene.sks in Resources */,
 				2714E19925B1E08E0038EF9B /* AttackButton.sks in Resources */,
@@ -154,6 +161,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2714E1A625B2091F0038EF9B /* SKTileMapNode+Physics.swift in Sources */,
 				27FE0F5625B0F5600071F483 /* Player.swift in Sources */,
 				27D24BEA25B0DED6008E6E44 /* GameScene.swift in Sources */,
 				27D24BEC25B0DED6008E6E44 /* GameViewController.swift in Sources */,
