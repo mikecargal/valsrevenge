@@ -9,7 +9,7 @@ import GameplayKit
 import SpriteKit
 
 class GeneratorComponent: GKComponent {
-    @GKInspectable var monsterType: String = "skeleton"
+    @GKInspectable var monsterType: String = GameObject.defaultGeneratorType
     @GKInspectable var maxMonsters: Int = 10
     
     @GKInspectable var waitTime: TimeInterval = 5
