@@ -17,7 +17,6 @@ extension SKTexture {
             let textureName = "\(prefix)\(i)"
             textureArray.append(textureAtlas.textureNamed(textureName))
         }
-        print("loadTextures in atlas: \(atlas) (prefix: \(prefix) [\(startsAt)...\(stopsAt)\n\t\(textureArray)")
         return textureArray
     }
 }
