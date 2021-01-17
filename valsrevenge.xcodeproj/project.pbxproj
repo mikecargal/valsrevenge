@@ -98,8 +98,6 @@
 		2714E1A825B231E30038EF9B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				27FBD1AA25B4B076004E5551 /* Entities */,
-				279AC94B25B2470C00BBD70F /* Components */,
 				2714E19B25B1E5BA0038EF9B /* SKScene+viewProperties.swift */,
 				2714E19E25B1F1A00038EF9B /* GameScene+ViewUpdates.swift */,
 				2714E1A525B2091F0038EF9B /* SKTileMapNode+Physics.swift */,
@@ -174,6 +172,13 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		27AEEDE225B4CAB3007C809F /* States */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = States;
+			sourceTree = "<group>";
+		};
 		27D24BD725B0DED5008E6E44 = {
 			isa = PBXGroup;
 			children = (
@@ -200,6 +205,9 @@
 				2714E1AB25B232660038EF9B /* Tile Sets */,
 				2714E1AA25B232490038EF9B /* Scenes */,
 				2714E1A925B232060038EF9B /* Reference Nodes */,
+				27FBD1AA25B4B076004E5551 /* Entities */,
+				279AC94B25B2470C00BBD70F /* Components */,
+				27AEEDE225B4CAB3007C809F /* States */,
 				2714E1A825B231E30038EF9B /* Extensions */,
 				27D24BE325B0DED5008E6E44 /* AppDelegate.swift */,
 				27D24BF225B0DED6008E6E44 /* Info.plist */,
