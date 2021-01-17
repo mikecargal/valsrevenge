@@ -16,23 +16,19 @@ class HealthComponent: GKComponent {
     private let healthEmpty = SKTexture(imageNamed: "health_empty")
     
     override func didAddToEntity() {
-        guard let node = entity?.component(ofType: GKSKNodeComponent.self)?.node else {
-            return
-        }
-        
         if let healthMeter = SKReferenceNode(fileNamed: "HealthMeter") {
             healthMeter.position = CGPoint(x: 0, y: 100)
-            node.addChild(healthMeter)
-            updateHealth(0, forNode: node)
+            componentNode.addChild(healthMeter)
+            updateHealth(0, forNode: componentNode)
         }
     }
     
-    func updateHealth(_ value:Int, forNode node: SKNode?) {
-        currentHealth += min(value,maxHealth)
+    func updateHealth(_ value: Int, forNode node: SKNode?) {
+        currentHealth += min(value, maxHealth)
         
         if let _ = node as? Player {
             for barNum in 1...maxHealth {
-                setupBar(at: barNum,tint: .cyan)
+                setupBar(at: barNum, tint: .cyan)
             }
         } else {
             for barNum in 1...maxHealth {
@@ -42,9 +38,7 @@ class HealthComponent: GKComponent {
     }
     
     func setupBar(at num: Int, tint: SKColor? = nil) {
-        guard let node = entity?.component(ofType: GKSKNodeComponent.self)?.node else { return }
-        
-        if let health = node.childNode(withName: ".//health_\(num)") as? SKSpriteNode {
+        if let health = componentNode.childNode(withName: ".//health_\(num)") as? SKSpriteNode {
             if currentHealth >= num {
                 health.texture = healthFull
                 if let tint = tint {
@@ -57,10 +51,6 @@ class HealthComponent: GKComponent {
             }
         }
     }
-
-    override func willRemoveFromEntity() {}
-    
-    override func update(deltaTime seconds: TimeInterval) {}
     
     override class var supportsSecureCoding: Bool {
         true
