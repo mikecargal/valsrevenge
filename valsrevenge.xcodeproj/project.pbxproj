@@ -27,6 +27,7 @@
 		2714E1C725B2354E0038EF9B /* exit.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2714E1BB25B2354E0038EF9B /* exit.mp3 */; };
 		2714E1C825B2354E0038EF9B /* monster_die.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2714E1BC25B2354E0038EF9B /* monster_die.mp3 */; };
 		2714E1CB25B2357D0038EF9B /* HealthMeter.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2714E1CA25B2357D0038EF9B /* HealthMeter.sks */; };
+		27A803E925B49B1D0057BB27 /* HealthComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A803E825B49B1D0057BB27 /* HealthComponent.swift */; };
 		27D24BE425B0DED5008E6E44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D24BE325B0DED5008E6E44 /* AppDelegate.swift */; };
 		27D24BE625B0DED6008E6E44 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 27D24BE525B0DED6008E6E44 /* GameScene.sks */; };
 		27D24BEA25B0DED6008E6E44 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D24BE925B0DED6008E6E44 /* GameScene.swift */; };
@@ -57,6 +58,7 @@
 		2714E1BB25B2354E0038EF9B /* exit.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = exit.mp3; sourceTree = "<group>"; };
 		2714E1BC25B2354E0038EF9B /* monster_die.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = monster_die.mp3; sourceTree = "<group>"; };
 		2714E1CA25B2357D0038EF9B /* HealthMeter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = HealthMeter.sks; sourceTree = "<group>"; };
+		27A803E825B49B1D0057BB27 /* HealthComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthComponent.swift; sourceTree = "<group>"; };
 		27D24BE025B0DED5008E6E44 /* valsrevenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = valsrevenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D24BE325B0DED5008E6E44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27D24BE525B0DED6008E6E44 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 		2714E1A825B231E30038EF9B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				279AC94B25B2470C00BBD70F /* Components */,
 				2714E19B25B1E5BA0038EF9B /* SKScene+viewProperties.swift */,
 				2714E19E25B1F1A00038EF9B /* GameScene+ViewUpdates.swift */,
 				2714E1A525B2091F0038EF9B /* SKTileMapNode+Physics.swift */,
@@ -141,6 +144,14 @@
 				2714E1BA25B2354E0038EF9B /* treasure.mp3 */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		279AC94B25B2470C00BBD70F /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				27A803E825B49B1D0057BB27 /* HealthComponent.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		27D24BD725B0DED5008E6E44 = {
@@ -266,6 +277,7 @@
 			files = (
 				2714E1A625B2091F0038EF9B /* SKTileMapNode+Physics.swift in Sources */,
 				27FE0F5625B0F5600071F483 /* Player.swift in Sources */,
+				27A803E925B49B1D0057BB27 /* HealthComponent.swift in Sources */,
 				27D24BEA25B0DED6008E6E44 /* GameScene.swift in Sources */,
 				2714E1BF25B2354E0038EF9B /* SoundLibrary.swift in Sources */,
 				27D24BEC25B0DED6008E6E44 /* GameViewController.swift in Sources */,
