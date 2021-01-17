@@ -5,7 +5,7 @@
 //  Created by Mike Cargal on 1/14/21.
 //
 
-import Foundation
+import GameplayKit
 import SpriteKit
 
 enum Direction: String {
@@ -21,18 +21,21 @@ enum Direction: String {
 }
 
 class Player: SKSpriteNode {
+    var stateMachine = GKStateMachine(states: [PlayerHasKeyState(), PlayerHasNoKeyState()])
     private var currentDirection = Direction.stop
 
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        stateMachine.enter(PlayerHasNoKeyState.self)
+    }
+
     func move(_ direction: Direction) {
-        print("move player: \(direction.rawValue)")
         if direction != .stop {
             currentDirection = direction
         }
         switch direction {
         case .up:
             physicsBody?.velocity = CGVector(dx: 0, dy: 100)
-//            physicsBody?.applyImpulse(CGVector(dx: 0, dy: 100))
-//            physicsBody?.applyForce(CGVector(dx: 0, dy: 100))
         case .down:
             physicsBody?.velocity = CGVector(dx: 0, dy: -100)
         case .left:
