@@ -29,6 +29,9 @@
 		2714E1CB25B2357D0038EF9B /* HealthMeter.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2714E1CA25B2357D0038EF9B /* HealthMeter.sks */; };
 		27A803E925B49B1D0057BB27 /* HealthComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A803E825B49B1D0057BB27 /* HealthComponent.swift */; };
 		27AEEDE425B4CBCB007C809F /* PlayerStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AEEDE325B4CBCB007C809F /* PlayerStates.swift */; };
+		27AEEDE725B4E2C6007C809F /* CollectibleComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AEEDE625B4E2C6007C809F /* CollectibleComponent.swift */; };
+		27AEEDEA25B4E993007C809F /* PhysicCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AEEDE925B4E993007C809F /* PhysicCategory.swift */; };
+		27AEEDEE25B4F0B3007C809F /* GameScene+PhysicsContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AEEDED25B4F0B3007C809F /* GameScene+PhysicsContact.swift */; };
 		27D24BE425B0DED5008E6E44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D24BE325B0DED5008E6E44 /* AppDelegate.swift */; };
 		27D24BE625B0DED6008E6E44 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 27D24BE525B0DED6008E6E44 /* GameScene.sks */; };
 		27D24BEA25B0DED6008E6E44 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D24BE925B0DED6008E6E44 /* GameScene.swift */; };
@@ -68,6 +71,9 @@
 		2714E1CA25B2357D0038EF9B /* HealthMeter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = HealthMeter.sks; sourceTree = "<group>"; };
 		27A803E825B49B1D0057BB27 /* HealthComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthComponent.swift; sourceTree = "<group>"; };
 		27AEEDE325B4CBCB007C809F /* PlayerStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStates.swift; sourceTree = "<group>"; };
+		27AEEDE625B4E2C6007C809F /* CollectibleComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectibleComponent.swift; sourceTree = "<group>"; };
+		27AEEDE925B4E993007C809F /* PhysicCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicCategory.swift; sourceTree = "<group>"; };
+		27AEEDED25B4F0B3007C809F /* GameScene+PhysicsContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+PhysicsContact.swift"; sourceTree = "<group>"; };
 		27D24BE025B0DED5008E6E44 /* valsrevenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = valsrevenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D24BE325B0DED5008E6E44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27D24BE525B0DED6008E6E44 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -105,6 +111,7 @@
 				2714E1A525B2091F0038EF9B /* SKTileMapNode+Physics.swift */,
 				27FBD1B425B4B320004E5551 /* GKComponent+Node.swift */,
 				27FBD1B725B4B759004E5551 /* SKTexture_LoadTextures.swift */,
+				27AEEDED25B4F0B3007C809F /* GameScene+PhysicsContact.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -170,6 +177,8 @@
 				27FBD1AE25B4B113004E5551 /* RenderComponent.swift */,
 				27FBD1B125B4B2AE004E5551 /* GeneratorComponent.swift */,
 				27FBD1BA25B4B840004E5551 /* AnimationComponent.swift */,
+				27AEEDE625B4E2C6007C809F /* CollectibleComponent.swift */,
+				27AEEDE925B4E993007C809F /* PhysicCategory.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -317,6 +326,7 @@
 			files = (
 				27FBD1BE25B4B9AC004E5551 /* GameObjects.swift in Sources */,
 				2714E1A625B2091F0038EF9B /* SKTileMapNode+Physics.swift in Sources */,
+				27AEEDE725B4E2C6007C809F /* CollectibleComponent.swift in Sources */,
 				27FBD1B225B4B2AE004E5551 /* GeneratorComponent.swift in Sources */,
 				27FE0F5625B0F5600071F483 /* Player.swift in Sources */,
 				27A803E925B49B1D0057BB27 /* HealthComponent.swift in Sources */,
@@ -331,7 +341,9 @@
 				2714E19F25B1F1A00038EF9B /* GameScene+ViewUpdates.swift in Sources */,
 				27FBD1AF25B4B113004E5551 /* RenderComponent.swift in Sources */,
 				2714E19C25B1E5BA0038EF9B /* SKScene+viewProperties.swift in Sources */,
+				27AEEDEA25B4E993007C809F /* PhysicCategory.swift in Sources */,
 				27FBD1AC25B4B090004E5551 /* MonsterEntity.swift in Sources */,
+				27AEEDEE25B4F0B3007C809F /* GameScene+PhysicsContact.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

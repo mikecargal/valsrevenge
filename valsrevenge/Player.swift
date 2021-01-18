@@ -24,11 +24,62 @@ class Player: SKSpriteNode {
     var stateMachine = GKStateMachine(states: [PlayerHasKeyState(), PlayerHasNoKeyState()])
     private var currentDirection = Direction.stop
 
+    private var keys: Int = 0 {
+        didSet {
+            print("Keys: \(keys)")
+            if keys < 1 {
+                stateMachine.enter(PlayerHasNoKeyState.self)
+            } else {
+                stateMachine.enter(PlayerHasKeyState.self)
+            }
+        }
+    }
+
+    private var treasure: Int = 0 {
+        didSet {
+            print("Treasure: \(treasure)")
+        }
+    }
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         stateMachine.enter(PlayerHasNoKeyState.self)
     }
 
+    func collectItem(_ collectibleNode: SKNode) {
+        guard let collectible = collectibleNode.entity?.component(ofType: CollectibleComponent.self) else { return }
+
+        collectible.collectedItem()
+
+        switch GameObjectType(rawValue: collectible.collectibleType) {
+        case .key:
+            print("collected key")
+            keys += collectible.value
+        case .food:
+            print("collected food")
+            if let hc = entity?.component(ofType: HealthComponent.self) {
+                hc.updateHealth(collectible.value, forNode: self)
+            }
+        case .treasure:
+            print("collected trasure")
+            treasure += collectible.value
+        default:
+            break
+        }
+    }
+
+    func useKeyToOpenDoor(_ doorNode: SKNode) {
+            print("use key to poen door")
+        switch stateMachine.currentState {
+        case is PlayerHasKeyState:
+            keys -= 1
+            doorNode.removeFromParent()
+            run(SKAction.playSoundFileNamed("door_open", waitForCompletion:     true))
+        default:
+            break
+        }
+    }
+    
     func move(_ direction: Direction) {
         if direction != .stop {
             currentDirection = direction
