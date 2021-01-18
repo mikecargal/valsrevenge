@@ -30,7 +30,6 @@ class Player: SKSpriteNode {
         didSet {
             print("Keys: \(keys)")
             stateMachine.enter(keys < 1 ? PlayerHasNoKeyState.self : PlayerHasKeyState.self)
-            print("Player new state: \(stateMachine.currentState!)")
         }
     }
 
@@ -43,7 +42,6 @@ class Player: SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         stateMachine.enter(PlayerHasNoKeyState.self)
-        print("Player init state: \(stateMachine.currentState!)")
     }
 
     func collectItem(_ collectibleNode: SKNode) {
@@ -69,7 +67,7 @@ class Player: SKSpriteNode {
     }
 
     func useKeyToOpenDoor(_ doorNode: SKNode) {
-        print("use key to open door (\(stateMachine.currentState!))")
+        print("use key to open door")
         if stateMachine.currentState is PlayerHasKeyState {
             keys -= 1
             doorNode.removeFromParent()

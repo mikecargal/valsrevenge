@@ -37,7 +37,6 @@ struct PhysicsBody: OptionSet, Hashable {
     static let collisions: [PhysicsBody: [PhysicsBody]] = [
         .player: [.wall, .door],
         .monster: [.wall, .door],
-      //  .door: [.player,.monster]
     ]
 
     static let contactTests: [PhysicsBody: [PhysicsBody]] = [
@@ -47,7 +46,7 @@ struct PhysicsBody: OptionSet, Hashable {
         .monster: [.player, .projectile],
         .projectile: [.monster, .collectible, .wall],
         .collectible: [.player, .projectile],
-        .exit: [.player]
+        .exit: [.player],
     ]
 
     var categoryBitMask: UInt32 {
@@ -58,10 +57,7 @@ struct PhysicsBody: OptionSet, Hashable {
         let bitMask = PhysicsBody
             .collisions[self]?
             .reduce(PhysicsBody()) { result, physicsBody in
-                print("before union: result=\(result), physicsBody=\(physicsBody)")
-                let newRes = result.union(physicsBody)
-                print("after union: result=\(newRes), physicsBody=\(physicsBody)")
-                return newRes
+                result.union(physicsBody)
             }
         return bitMask?.rawValue ?? 0
     }
@@ -114,7 +110,6 @@ class PhysicsComponent: GKComponent {
 
         switch bodyShape {
         case .rect:
-            print("PhysicsComponent.physicsBody -> rectangleOf \(size)")
             componentNode.physicsBody = SKPhysicsBody(rectangleOf: size)
         case .circle:
             componentNode.physicsBody = SKPhysicsBody(circleOfRadius: size.height / 2)
