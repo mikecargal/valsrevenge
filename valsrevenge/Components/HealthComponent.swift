@@ -15,16 +15,41 @@ class HealthComponent: GKComponent {
     private let healthFull = SKTexture(imageNamed: "health_full")
     private let healthEmpty = SKTexture(imageNamed: "health_empty")
     
+    private var hitAction = SKAction()
+    private var dieAction = SKAction()
+    
     override func didAddToEntity() {
         if let healthMeter = SKReferenceNode(fileNamed: "HealthMeter") {
             healthMeter.position = CGPoint(x: 0, y: 100)
             componentNode.addChild(healthMeter)
             updateHealth(0, forNode: componentNode)
+            
+            if let _ = componentNode as? Player {
+                hitAction = SKAction.playSoundFileNamed("player hit", waitForCompletion: false)
+                dieAction = SKAction.run {
+                    self.componentNode.run(SKAction.playSoundFileNamed("player_die", waitForCompletion: false)) {
+                        // TODO: add code to restart the game
+                        self.currentHealth = self.maxHealth
+                    }
+                }
+            } else {
+                hitAction = SKAction.playSoundFileNamed("monster_hit", waitForCompletion: false)
+                dieAction = SKAction.run {
+                    self.componentNode.run(SKAction.playSoundFileNamed("monster_die", waitForCompletion: false)) {
+                        self.componentNode.removeFromParent()
+                    }
+                }
+            }
         }
     }
     
     func updateHealth(_ value: Int, forNode node: SKNode?) {
         currentHealth += min(value, maxHealth)
+        
+        // run hit or die actions
+        if value < 0 {
+            componentNode.run(currentHealth == 0 ? dieAction : hitAction)
+        }
         
         if let _ = node as? Player {
             for barNum in 1...maxHealth {

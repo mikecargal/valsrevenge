@@ -50,11 +50,23 @@ class GeneratorComponent: GKComponent {
             monsterNode.position = componentNode.position
             componentNode.parent?.addChild(monsterNode)
             
-            monsterNode.run(SKAction.moveBy(x: 100, y: 0, duration: 1.0))
+            let randomPositions: [CGFloat] = [-50,-50,50]
+            let randomX = randomPositions.randomElement() ?? 0
+            monsterNode.run(SKAction.moveBy(x: randomX, y: 0, duration: 1.0))
             
             let healthComponent = HealthComponent()
             healthComponent.currentHealth = monsterHealth
             monsterEntity.addComponent(healthComponent)
+            
+            monsterEntity.addComponent(AgentComponent())
+            
+            let physicsComponent = PhysicsComponent()
+            physicsComponent.bodyCategory = PhysicsCategory.monster.rawValue
+            monsterEntity.addComponent(physicsComponent)
+            
+            if let scene = componentNode.scene as? GameScene {
+                scene.entities.append(monsterEntity)
+            }
         }
     }
     

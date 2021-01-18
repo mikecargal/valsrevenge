@@ -24,11 +24,12 @@ class Player: SKSpriteNode {
     var stateMachine = GKStateMachine(states: [PlayerHasKeyState(),
                                                PlayerHasNoKeyState()])
 
+    var agent = GKAgent2D()
+
     private var currentDirection = Direction.stop
 
     private var keys: Int = 0 {
         didSet {
-            print("Keys: \(keys)")
             stateMachine.enter(keys < 1 ? PlayerHasNoKeyState.self : PlayerHasKeyState.self)
         }
     }
@@ -41,6 +42,7 @@ class Player: SKSpriteNode {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        agent.delegate = self
         stateMachine.enter(PlayerHasNoKeyState.self)
     }
 
@@ -51,15 +53,12 @@ class Player: SKSpriteNode {
 
         switch GameObjectType(rawValue: collectible.collectibleType) {
         case .key:
-            print("collected key")
             keys += collectible.value
         case .food:
-            print("collected food")
             if let hc = entity?.component(ofType: HealthComponent.self) {
                 hc.updateHealth(collectible.value, forNode: self)
             }
         case .treasure:
-            print("collected treasure")
             treasure += collectible.value
         default:
             break
@@ -67,7 +66,6 @@ class Player: SKSpriteNode {
     }
 
     func useKeyToOpenDoor(_ doorNode: SKNode) {
-        print("use key to open door")
         if stateMachine.currentState is PlayerHasKeyState {
             keys -= 1
             doorNode.removeFromParent()
@@ -97,7 +95,7 @@ class Player: SKSpriteNode {
         case .stop:
             stop()
         }
-        
+
         if direction != .stop {
             currentDirection = direction
         }
@@ -108,24 +106,23 @@ class Player: SKSpriteNode {
     }
 
     func attack() {
-        print("attack!!!")
         let projectile = SKSpriteNode(imageNamed: "knife")
         projectile.position = CGPoint(x: 0.0, y: 0.0)
         addChild(projectile)
 
         // Set up physics for projectile
         let physicsBody = SKPhysicsBody(rectangleOf: projectile.size)
-        
+
         physicsBody.affectedByGravity = false
         physicsBody.allowsRotation = true
         physicsBody.isDynamic = true
-        
+
         physicsBody.categoryBitMask = PhysicsBody.projectile.categoryBitMask
         physicsBody.contactTestBitMask = PhysicsBody.projectile.contactTestBitMask
         physicsBody.collisionBitMask = PhysicsBody.projectile.collisionBitMask
-        
+
         projectile.physicsBody = physicsBody
-        
+
         var throwDirection = CGVector()
 
         switch currentDirection {

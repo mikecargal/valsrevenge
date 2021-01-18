@@ -12,7 +12,7 @@ extension GameScene: SKPhysicsContactDelegate {
         let collision = contact.bodyA.categoryBitMask |
             contact.bodyB.categoryBitMask
         switch collision {
-      // MARK: - Player | Collectible
+        // MARK: - Player | Collectible
 
         case PhysicsBody.player.categoryBitMask | PhysicsBody.collectible.categoryBitMask:
             let (playerNode, collectibleNode) = contact.bodyA.categoryBitMask == PhysicsBody.player.categoryBitMask ?
@@ -48,6 +48,26 @@ extension GameScene: SKPhysicsContactDelegate {
                 collectibleComponent.destroyedItem()
             }
             projectileNode?.removeFromParent()
+
+        // MARK: - Player | Monster
+
+        case PhysicsBody.player.categoryBitMask | PhysicsBody.monster.categoryBitMask:
+            let playerNode = contact.bodyA.categoryBitMask == PhysicsBody.player.contactTestBitMask ?
+                contact.bodyA.node : contact.bodyB.node
+            if let healthComponent = playerNode?.entity?.component(ofType: HealthComponent.self) {
+                healthComponent.updateHealth(-1, forNode: playerNode)
+            }
+
+        // MARK: - Projectile | Monster
+
+        case PhysicsBody.projectile.categoryBitMask | PhysicsBody.monster.categoryBitMask:
+            let monsterNode = contact.bodyA.categoryBitMask == PhysicsBody.monster.categoryBitMask ?
+                contact.bodyA.node : contact.bodyB.node
+
+            if let healthComponent = monsterNode?.entity?.component(ofType: HealthComponent.self) {
+                healthComponent.updateHealth(-1, forNode: monsterNode)
+            }
+
         default:
             break
         }

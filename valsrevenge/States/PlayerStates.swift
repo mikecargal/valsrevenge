@@ -13,17 +13,11 @@ class PlayerHasKeyState: GKState {
             stateClass == PlayerHasNoKeyState.self
     }
 
-    override func didEnter(from previousState: GKState?) {
-        print("Entering PlayerHasKeyState")
-    }
+    override func didEnter(from previousState: GKState?) {}
 
-    override func willExit(to nextState: GKState) {
-        print("Exiting PlayerHasKeyState")
-    }
+    override func willExit(to nextState: GKState) {}
 
-    override func update(deltaTime seconds: TimeInterval) {
-        print("updating PlayerHasKeyState")
-    }
+    override func update(deltaTime seconds: TimeInterval) {}
 }
 
 class PlayerHasNoKeyState: GKState {
@@ -32,16 +26,9 @@ class PlayerHasNoKeyState: GKState {
             stateClass == PlayerHasNoKeyState.self
     }
 
-    override func didEnter(from previousState: GKState?) {
-        print("Entering PlayerHasNoKeyState")
-    }
+    override func didEnter(from previousState: GKState?) {}
 
-    override func willExit(to nextState: GKState) {
-        print("Exiting PlayerHasNoKeyState")
-    }
+    override func willExit(to nextState: GKState) {}
 
-    override func update(deltaTime seconds: TimeInterval) {
-        print("updating PlayerHasNoKeyState")
-    }
-
+    override func update(deltaTime seconds: TimeInterval) {}
 }

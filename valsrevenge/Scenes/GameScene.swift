@@ -34,10 +34,9 @@ class GameScene: SKScene {
         
         mainGameStateMachine.enter(PauseState.self)
         
-        self.player = childNode(withName: "player") as? Player
-        self.player?.move(.stop)
+        setupPlayer()
+        setupCamera()
         
-        self.setupCamera()
         let grassMapNode = childNode(withName: "Grass Tile Map") as? SKTileMapNode
         grassMapNode?.setupEdgeLoop()
         
@@ -53,8 +52,16 @@ class GameScene: SKScene {
         camera?.constraints = [playerConstraint]
     }
     
+    func setupPlayer() {
+        player = childNode(withName: "player") as? Player
+        if let player = player {
+            player.move(.stop)
+            agentComponentSystem.addComponent(player.agent)
+            
+        }
+    }
+     
     func touchDown(atPoint pos: CGPoint) {
-        print("entering Playing State")
         mainGameStateMachine.enter(PlayingState.self)
         let nodeAtPoint = atPoint(pos)
         if let touchedNode = nodeAtPoint as? SKSpriteNode {
@@ -112,6 +119,9 @@ class GameScene: SKScene {
         
         // Calculate time since last update
         let dt = currentTime - self.lastUpdateTime
+        
+        // update the component system
+        agentComponentSystem.update(deltaTime: dt)
         
         // Update entities
         for entity in self.entities {
