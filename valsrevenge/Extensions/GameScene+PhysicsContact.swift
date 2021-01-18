@@ -15,13 +15,10 @@ extension GameScene: SKPhysicsContactDelegate {
       // MARK: - Player | Collectible
 
         case PhysicsBody.player.categoryBitMask | PhysicsBody.collectible.categoryBitMask:
-            let playerNode = contact.bodyA.categoryBitMask == PhysicsBody.player.categoryBitMask ?
-                contact.bodyA.node :
-                contact.bodyB.node
+            let (playerNode, collectibleNode) = contact.bodyA.categoryBitMask == PhysicsBody.player.categoryBitMask ?
+                (contact.bodyA.node, contact.bodyB.node) :
+                (contact.bodyB.node, contact.bodyA.node)
 
-            let collectibleNode = contact.bodyA.categoryBitMask == PhysicsBody.collectible.categoryBitMask ?
-                contact.bodyA.node :
-                contact.bodyB.node
             if let player = playerNode as? Player,
                let collectible = collectibleNode
             {
@@ -31,19 +28,26 @@ extension GameScene: SKPhysicsContactDelegate {
         // MARK: - Player | Door
 
         case PhysicsBody.player.categoryBitMask | PhysicsBody.door.categoryBitMask:
-            let playerNode = contact.bodyA.categoryBitMask == PhysicsBody.player.categoryBitMask ?
-                contact.bodyA.node :
-                contact.bodyB.node
+            let (playerNode, doorNode) = contact.bodyA.categoryBitMask == PhysicsBody.player.categoryBitMask ?
+                (contact.bodyA.node, contact.bodyB.node) :
+                (contact.bodyB.node, contact.bodyA.node)
 
-            let doorNode = contact.bodyA.categoryBitMask == PhysicsBody.door.categoryBitMask ?
-                contact.bodyA.node :
-                contact.bodyB.node
             if let player = playerNode as? Player,
                let door = doorNode
             {
                 player.useKeyToOpenDoor(door)
             }
 
+        // MARK: - Projectile | Collectible
+
+        case PhysicsBody.projectile.categoryBitMask | PhysicsBody.collectible.categoryBitMask:
+            let (projectileNode, collectibleNode) = contact.bodyA.categoryBitMask == PhysicsBody.projectile.categoryBitMask ?
+                (contact.bodyA.node, contact.bodyB.node) :
+                (contact.bodyB.node, contact.bodyA.node)
+            if let collectibleComponent = collectibleNode?.entity?.component(ofType: CollectibleComponent.self) {
+                collectibleComponent.destroyedItem()
+            }
+            projectileNode?.removeFromParent()
         default:
             break
         }

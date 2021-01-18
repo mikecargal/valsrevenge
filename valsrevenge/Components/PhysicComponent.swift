@@ -55,8 +55,6 @@ struct PhysicsBody: OptionSet, Hashable {
     }
 
     var collisionBitMask: UInt32 {
-     //   print("PhysicsBody.collisions = \(PhysicsBody.collisions)")
-        print("collisions for \(self) = \(PhysicsBody.collisions[self])")
         let bitMask = PhysicsBody
             .collisions[self]?
             .reduce(PhysicsBody()) { result, physicsBody in
@@ -65,7 +63,6 @@ struct PhysicsBody: OptionSet, Hashable {
                 print("after union: result=\(newRes), physicsBody=\(physicsBody)")
                 return newRes
             }
-        print("collisionBitMask for \(self) = \(bitMask) (\(bitMask?.rawValue))")
         return bitMask?.rawValue ?? 0
     }
 

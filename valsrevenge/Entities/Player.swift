@@ -115,6 +115,19 @@ class Player: SKSpriteNode {
         projectile.position = CGPoint(x: 0.0, y: 0.0)
         addChild(projectile)
 
+        // Set up physics for projectile
+        let physicsBody = SKPhysicsBody(rectangleOf: projectile.size)
+        
+        physicsBody.affectedByGravity = false
+        physicsBody.allowsRotation = true
+        physicsBody.isDynamic = true
+        
+        physicsBody.categoryBitMask = PhysicsBody.projectile.categoryBitMask
+        physicsBody.contactTestBitMask = PhysicsBody.projectile.contactTestBitMask
+        physicsBody.collisionBitMask = PhysicsBody.projectile.collisionBitMask
+        
+        projectile.physicsBody = physicsBody
+        
         var throwDirection = CGVector()
 
         switch currentDirection {
