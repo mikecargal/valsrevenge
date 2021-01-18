@@ -21,7 +21,9 @@ extension SKTileMapNode {
         physicsBody?.affectedByGravity = false
         physicsBody?.allowsRotation = false
         physicsBody?.isDynamic = false
-        physicsBody?.categoryBitMask = 2
+        physicsBody?.categoryBitMask = PhysicsBody.wall.categoryBitMask
+        physicsBody?.collisionBitMask = PhysicsBody.wall.collisionBitMask
+        physicsBody?.contactTestBitMask = PhysicsBody.wall.contactTestBitMask
     }
     
     func setupMapPhysics() {
@@ -51,7 +53,10 @@ extension SKTileMapNode {
                         tileNode.physicsBody?.affectedByGravity = false
                         tileNode.physicsBody?.allowsRotation = false
                         tileNode.physicsBody?.isDynamic = false
-                        tileNode.physicsBody?.categoryBitMask = 2
+                        tileNode.physicsBody?.categoryBitMask = PhysicsBody.wall.categoryBitMask
+                        tileNode.physicsBody?.collisionBitMask = PhysicsBody.wall.collisionBitMask
+                        tileNode.physicsBody?.contactTestBitMask = PhysicsBody.wall.contactTestBitMask
+                        
                         addChild(tileNode)
                     }
                 }

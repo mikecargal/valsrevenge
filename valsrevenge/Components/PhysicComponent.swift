@@ -37,6 +37,7 @@ struct PhysicsBody: OptionSet, Hashable {
     static let collisions: [PhysicsBody: [PhysicsBody]] = [
         .player: [.wall, .door],
         .monster: [.wall, .door],
+      //  .door: [.player,.monster]
     ]
 
     static let contactTests: [PhysicsBody: [PhysicsBody]] = [
@@ -46,20 +47,34 @@ struct PhysicsBody: OptionSet, Hashable {
         .monster: [.player, .projectile],
         .projectile: [.monster, .collectible, .wall],
         .collectible: [.player, .projectile],
-        .exit: [.player],
+        .exit: [.player]
     ]
 
     var categoryBitMask: UInt32 {
-        return rawValue
+        return self.rawValue
     }
 
     var collisionBitMask: UInt32 {
-        let bitMask = PhysicsBody.collisions[self]?.reduce(PhysicsBody()) { result, physicsBody in result.union(physicsBody) }
+     //   print("PhysicsBody.collisions = \(PhysicsBody.collisions)")
+        print("collisions for \(self) = \(PhysicsBody.collisions[self])")
+        let bitMask = PhysicsBody
+            .collisions[self]?
+            .reduce(PhysicsBody()) { result, physicsBody in
+                print("before union: result=\(result), physicsBody=\(physicsBody)")
+                let newRes = result.union(physicsBody)
+                print("after union: result=\(newRes), physicsBody=\(physicsBody)")
+                return newRes
+            }
+        print("collisionBitMask for \(self) = \(bitMask) (\(bitMask?.rawValue))")
         return bitMask?.rawValue ?? 0
     }
 
     var contactTestBitMask: UInt32 {
-        let bitMask = PhysicsBody.contactTests[self]?.reduce(PhysicsBody()) { result, physicsBody in result.union(physicsBody) }
+        let bitMask = PhysicsBody
+            .contactTests[self]?
+            .reduce(PhysicsBody()) { result, physicsBody in
+                result.union(physicsBody)
+            }
         return bitMask?.rawValue ?? 0
     }
 
@@ -87,30 +102,35 @@ struct PhysicsBody: OptionSet, Hashable {
 }
 
 // MARK: - COMPONENT CODE STARTS HERE
+
 class PhysicsComponent: GKComponent {
     @GKInspectable var bodyCategory: String = PhysicsCategory.wall.rawValue
     @GKInspectable var bodyShape: String = PhysicsShape.circle.rawValue
-    
+
     override func didAddToEntity() {
         guard let bodyCategory = PhysicsBody.forType(PhysicsCategory(rawValue: bodyCategory)),
-              let sprite = componentNode as? SKSpriteNode else {return}
-        
+              let bodyShape = PhysicsShape(rawValue:self.bodyShape),
+              let sprite = componentNode as? SKSpriteNode
+        else { return }
+
         let size = sprite.size
-        
-        if bodyShape == PhysicsShape.rect.rawValue {
+
+        switch bodyShape {
+        case .rect:
+            print("PhysicsComponent.physicsBody -> rectangleOf \(size)")
             componentNode.physicsBody = SKPhysicsBody(rectangleOf: size)
-        } else if bodyShape == PhysicsShape.circle.rawValue {
-            componentNode.physicsBody = SKPhysicsBody(circleOfRadius: size.height/2)
+        case .circle:
+            componentNode.physicsBody = SKPhysicsBody(circleOfRadius: size.height / 2)
         }
-        
+
         componentNode.physicsBody?.categoryBitMask = bodyCategory.categoryBitMask
         componentNode.physicsBody?.collisionBitMask = bodyCategory.collisionBitMask
         componentNode.physicsBody?.contactTestBitMask = bodyCategory.contactTestBitMask
-        
+
         componentNode.physicsBody?.affectedByGravity = false
         componentNode.physicsBody?.allowsRotation = false
     }
-    
+
     override class var supportsSecureCoding: Bool {
         true
     }

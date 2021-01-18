@@ -21,17 +21,16 @@ enum Direction: String {
 }
 
 class Player: SKSpriteNode {
-    var stateMachine = GKStateMachine(states: [PlayerHasKeyState(), PlayerHasNoKeyState()])
+    var stateMachine = GKStateMachine(states: [PlayerHasKeyState(),
+                                               PlayerHasNoKeyState()])
+
     private var currentDirection = Direction.stop
 
     private var keys: Int = 0 {
         didSet {
             print("Keys: \(keys)")
-            if keys < 1 {
-                stateMachine.enter(PlayerHasNoKeyState.self)
-            } else {
-                stateMachine.enter(PlayerHasKeyState.self)
-            }
+            stateMachine.enter(keys < 1 ? PlayerHasNoKeyState.self : PlayerHasKeyState.self)
+            print("Player new state: \(stateMachine.currentState!)")
         }
     }
 
@@ -44,6 +43,7 @@ class Player: SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         stateMachine.enter(PlayerHasNoKeyState.self)
+        print("Player init state: \(stateMachine.currentState!)")
     }
 
     func collectItem(_ collectibleNode: SKNode) {
@@ -61,7 +61,7 @@ class Player: SKSpriteNode {
                 hc.updateHealth(collectible.value, forNode: self)
             }
         case .treasure:
-            print("collected trasure")
+            print("collected treasure")
             treasure += collectible.value
         default:
             break
@@ -69,21 +69,15 @@ class Player: SKSpriteNode {
     }
 
     func useKeyToOpenDoor(_ doorNode: SKNode) {
-            print("use key to poen door")
-        switch stateMachine.currentState {
-        case is PlayerHasKeyState:
+        print("use key to open door (\(stateMachine.currentState!))")
+        if stateMachine.currentState is PlayerHasKeyState {
             keys -= 1
             doorNode.removeFromParent()
-            run(SKAction.playSoundFileNamed("door_open", waitForCompletion:     true))
-        default:
-            break
+            run(SKAction.playSoundFileNamed("door_open", waitForCompletion: true))
         }
     }
-    
+
     func move(_ direction: Direction) {
-        if direction != .stop {
-            currentDirection = direction
-        }
         switch direction {
         case .up:
             physicsBody?.velocity = CGVector(dx: 0, dy: 100)
@@ -105,10 +99,13 @@ class Player: SKSpriteNode {
         case .stop:
             stop()
         }
+        
+        if direction != .stop {
+            currentDirection = direction
+        }
     }
 
     func stop() {
-        print("stop player")
         physicsBody?.velocity = CGVector(dx: 0, dy: 0)
     }
 
@@ -130,7 +127,7 @@ class Player: SKSpriteNode {
         case .left:
             throwDirection = CGVector(dx: -300.0, dy: 0.0)
             projectile.zRotation = CGFloat.pi/2
-        case .right:
+        case .right, .stop:
             throwDirection = CGVector(dx: 300.0, dy: 0.0)
             projectile.zRotation = -CGFloat.pi/2
         case .topLeft:
@@ -145,8 +142,6 @@ class Player: SKSpriteNode {
         case .bottomRight:
             throwDirection = CGVector(dx: 300.0, dy: -300.0)
             projectile.zRotation = 3 * -CGFloat.pi/4
-        case .stop:
-            print("WHAT?!?!? .stop should not be a current direction")
         }
 
         projectile.run(SKAction.move(by: throwDirection, duration: 0.25), completion: { projectile.removeFromParent() })

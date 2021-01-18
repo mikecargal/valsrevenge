@@ -8,7 +8,7 @@
 import GameplayKit
 import SpriteKit
 
-class GameScene: SKScene{
+class GameScene: SKScene {
     var entities = [GKEntity]()
     var graphs = [String: GKGraph]()
     private var player: Player?
@@ -30,7 +30,8 @@ class GameScene: SKScene{
         grassMapNode?.setupEdgeLoop()
         
         let dungeonMapNode = childNode(withName: "Dungeon Tile Map") as? SKTileMapNode
-        dungeonMapNode?.setupMapPhysics() 
+        dungeonMapNode?.setupMapPhysics()
+        physicsWorld.contactDelegate = self
     }
 
     func setupCamera() {
