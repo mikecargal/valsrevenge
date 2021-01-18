@@ -11,9 +11,18 @@ import SpriteKit
 class GameScene: SKScene {
     var entities = [GKEntity]()
     var graphs = [String: GKGraph]()
+    
+    let agentComponentSystem = GKComponentSystem(componentClass: GKAgent2D.self)
+    
     private var player: Player?
     
     let margin: CGFloat = 20.0
+    
+    let mainGameStateMachine = GKStateMachine(
+        states: [
+            PauseState(),
+            PlayingState()
+        ])
     
     private var lastUpdateTime: TimeInterval = 0
 
@@ -22,6 +31,9 @@ class GameScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
+        
+        mainGameStateMachine.enter(PauseState.self)
+        
         self.player = childNode(withName: "player") as? Player
         self.player?.move(.stop)
         
@@ -42,6 +54,8 @@ class GameScene: SKScene {
     }
     
     func touchDown(atPoint pos: CGPoint) {
+        print("entering Playing State")
+        mainGameStateMachine.enter(PlayingState.self)
         let nodeAtPoint = atPoint(pos)
         if let touchedNode = nodeAtPoint as? SKSpriteNode {
             if touchedNode.name?.starts(with: "controller_") == true {

@@ -39,9 +39,8 @@ class CollectibleComponent: GKComponent {
     private var canDestroy = false
         
     override func didAddToEntity() {
-        guard let collectible = GameObject.forCollectibleType(GameObjectType(rawValue: collectibleType)) else {
-            return
-        }
+        guard let collectible = GameObject.forCollectibleType(GameObjectType(rawValue: collectibleType))
+        else { return }
             
         collectSoundAction = SKAction.playSoundFileNamed(collectible.collectSoundFile, waitForCompletion: false)
         destroySoundAction = SKAction.playSoundFileNamed(collectible.destroySoundFile, waitForCompletion: false)

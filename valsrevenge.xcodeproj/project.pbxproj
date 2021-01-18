@@ -27,6 +27,7 @@
 		2714E1C725B2354E0038EF9B /* exit.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2714E1BB25B2354E0038EF9B /* exit.mp3 */; };
 		2714E1C825B2354E0038EF9B /* monster_die.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2714E1BC25B2354E0038EF9B /* monster_die.mp3 */; };
 		2714E1CB25B2357D0038EF9B /* HealthMeter.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2714E1CA25B2357D0038EF9B /* HealthMeter.sks */; };
+		271D570425B6253F00E25C93 /* MainGameStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271D570325B6253F00E25C93 /* MainGameStates.swift */; };
 		27A803E925B49B1D0057BB27 /* HealthComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A803E825B49B1D0057BB27 /* HealthComponent.swift */; };
 		27AEEDE425B4CBCB007C809F /* PlayerStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AEEDE325B4CBCB007C809F /* PlayerStates.swift */; };
 		27AEEDE725B4E2C6007C809F /* CollectibleComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AEEDE625B4E2C6007C809F /* CollectibleComponent.swift */; };
@@ -69,6 +70,7 @@
 		2714E1BB25B2354E0038EF9B /* exit.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = exit.mp3; sourceTree = "<group>"; };
 		2714E1BC25B2354E0038EF9B /* monster_die.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = monster_die.mp3; sourceTree = "<group>"; };
 		2714E1CA25B2357D0038EF9B /* HealthMeter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = HealthMeter.sks; sourceTree = "<group>"; };
+		271D570325B6253F00E25C93 /* MainGameStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGameStates.swift; sourceTree = "<group>"; };
 		27A803E825B49B1D0057BB27 /* HealthComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthComponent.swift; sourceTree = "<group>"; };
 		27AEEDE325B4CBCB007C809F /* PlayerStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStates.swift; sourceTree = "<group>"; };
 		27AEEDE625B4E2C6007C809F /* CollectibleComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectibleComponent.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				27AEEDE325B4CBCB007C809F /* PlayerStates.swift */,
+				271D570325B6253F00E25C93 /* MainGameStates.swift */,
 			);
 			path = States;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				271D570425B6253F00E25C93 /* MainGameStates.swift in Sources */,
 				27FBD1BE25B4B9AC004E5551 /* GameObjects.swift in Sources */,
 				2714E1A625B2091F0038EF9B /* SKTileMapNode+Physics.swift in Sources */,
 				27AEEDE725B4E2C6007C809F /* CollectibleComponent.swift in Sources */,
