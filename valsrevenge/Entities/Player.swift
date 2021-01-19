@@ -28,14 +28,20 @@ class Player: SKSpriteNode {
 
     private var currentDirection = Direction.stop
 
+    var hud = SKNode()
+    private let treasureLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
+    private let keysLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
+
     private var keys: Int = 0 {
         didSet {
+            keysLabel.text = "Keys: \(keys)"
             stateMachine.enter(keys < 1 ? PlayerHasNoKeyState.self : PlayerHasKeyState.self)
         }
     }
 
     private var treasure: Int = 0 {
         didSet {
+            treasureLabel.text = "Treasure: \(treasure)"
             print("Treasure: \(treasure)")
         }
     }
@@ -44,6 +50,28 @@ class Player: SKSpriteNode {
         super.init(coder: aDecoder)
         agent.delegate = self
         stateMachine.enter(PlayerHasNoKeyState.self)
+    }
+
+    func setupHUD(scene: GameScene) {
+        // set up the treasue label
+        treasureLabel.text = "Treasure: \(treasure)"
+        treasureLabel.horizontalAlignmentMode = .right
+        treasureLabel.verticalAlignmentMode = .center
+        treasureLabel.position = CGPoint(x: 0, y: -treasureLabel.frame.height)
+        treasureLabel.zPosition += 1
+
+        // set up the keys label
+        keysLabel.text = "Keys: \(keys)"
+        keysLabel.horizontalAlignmentMode = .right
+        keysLabel.verticalAlignmentMode = .center
+        keysLabel.position = CGPoint(x: 0, y: treasureLabel.frame.minY - treasureLabel.frame.height)
+        keysLabel.zPosition += 1
+        
+        // Add the labels to the HUD
+        hud.addChild(treasureLabel)
+        hud.addChild(keysLabel)
+        
+        scene.addChild(hud)
     }
 
     func collectItem(_ collectibleNode: SKNode) {

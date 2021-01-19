@@ -55,6 +55,7 @@ class GameScene: SKScene {
     func setupPlayer() {
         self.player = childNode(withName: "player") as? Player
         if let player = player {
+            player.setupHUD(scene: self)
             player.move(.stop)
             self.agentComponentSystem.addComponent(player.agent)
         }
@@ -131,7 +132,8 @@ class GameScene: SKScene {
     }
     
     override func didFinishUpdate() {
-        self.updateControllerLocation()
+        updateControllerLocation()
+        updateHUDLocation()
     }
     
     func updateControllerLocation() {
@@ -151,6 +153,11 @@ class GameScene: SKScene {
             y: viewBottom +
                 self.margin +
                 insets.bottom)
+    }
+    
+    func updateHUDLocation() {
+        player?.hud.position = CGPoint(x: (viewRight - margin - insets.right),
+                                       y: (viewTop-margin-insets.top))
     }
     
     func startAdvancedNavigation() {
