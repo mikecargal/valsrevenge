@@ -25,7 +25,7 @@ class HealthComponent: GKComponent {
             updateHealth(0, forNode: componentNode)
             
             if let _ = componentNode as? Player {
-                hitAction = SKAction.playSoundFileNamed("player hit", waitForCompletion: false)
+                hitAction = SKAction.playSoundFileNamed("player_hit", waitForCompletion: false)
                 dieAction = SKAction.run {
                     self.componentNode.run(SKAction.playSoundFileNamed("player_die", waitForCompletion: false)) {
                         // TODO: add code to restart the game

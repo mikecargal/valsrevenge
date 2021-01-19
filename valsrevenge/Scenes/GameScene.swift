@@ -31,11 +31,10 @@ class GameScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
+        self.mainGameStateMachine.enter(PauseState.self)
         
-        mainGameStateMachine.enter(PauseState.self)
-        
-        setupPlayer()
-        setupCamera()
+        self.setupPlayer()
+        self.setupCamera()
         
         let grassMapNode = childNode(withName: "Grass Tile Map") as? SKTileMapNode
         grassMapNode?.setupEdgeLoop()
@@ -43,6 +42,7 @@ class GameScene: SKScene {
         let dungeonMapNode = childNode(withName: "Dungeon Tile Map") as? SKTileMapNode
         dungeonMapNode?.setupMapPhysics()
         physicsWorld.contactDelegate = self
+        self.startAdvancedNavigation()
     }
 
     func setupCamera() {
@@ -53,16 +53,15 @@ class GameScene: SKScene {
     }
     
     func setupPlayer() {
-        player = childNode(withName: "player") as? Player
+        self.player = childNode(withName: "player") as? Player
         if let player = player {
             player.move(.stop)
-            agentComponentSystem.addComponent(player.agent)
-            
+            self.agentComponentSystem.addComponent(player.agent)
         }
     }
      
     func touchDown(atPoint pos: CGPoint) {
-        mainGameStateMachine.enter(PlayingState.self)
+        self.mainGameStateMachine.enter(PlayingState.self)
         let nodeAtPoint = atPoint(pos)
         if let touchedNode = nodeAtPoint as? SKSpriteNode {
             if touchedNode.name?.starts(with: "controller_") == true {
@@ -121,7 +120,7 @@ class GameScene: SKScene {
         let dt = currentTime - self.lastUpdateTime
         
         // update the component system
-        agentComponentSystem.update(deltaTime: dt)
+        self.agentComponentSystem.update(deltaTime: dt)
         
         // Update entities
         for entity in self.entities {
@@ -152,5 +151,66 @@ class GameScene: SKScene {
             y: viewBottom +
                 self.margin +
                 insets.bottom)
+    }
+    
+    func startAdvancedNavigation() {
+        // check for a navigation graph and a key
+        guard let sceneGraph = graphs.values.first,
+              let keyNode = childNode(withName: "key") as? SKSpriteNode
+        else { return }
+        
+        let agent = GKAgent2D()
+        
+        agent.delegate = keyNode
+        agent.position = vector_float2(Float(keyNode.position.x),
+                                       Float(keyNode.position.y))
+        
+        // set up the agent's properties
+        agent.mass = 1
+        agent.speed = 50
+        agent.maxSpeed = 100
+        agent.maxAcceleration = 100
+        agent.radius = 60
+        
+        // Find obstacles (generators)
+        var obstacles = [GKCircleObstacle]()
+        enumerateChildNodes(withName: "generator_*") {
+            node, _ in
+            
+            // create compoatible obstacle
+            let circle = GKCircleObstacle(radius: Float(node.frame.size.width / 2))
+            circle.position = vector_float2(Float(node.position.x),
+                                            Float(node.position.y))
+            obstacles.append(circle)
+        }
+        if let nodesOnPath = sceneGraph.nodes as? [GKGraphNode2D] {
+            // show the path (optional code)
+//            for (index, node) in nodesOnPath.enumerated() {
+//                let shapeNode = SKShapeNode(circleOfRadius: 10)
+//                shapeNode.fillColor = .green
+//                shapeNode.position = CGPoint(x: CGFloat(node.position.x),
+//                                             y: CGFloat(node.position.y))
+//                // add node number
+//                let number = SKLabelNode(text: "\(index)")
+//                number.position.y = 15
+//                addChild(shapeNode)
+//            }
+            // end optional code
+            
+            // create a path to follow
+            let path = GKPath(graphNodes: nodesOnPath, radius: 0)
+            path.isCyclical = true
+            
+            // set up the goals
+            agent.behavior = GKBehavior(goals: [
+                GKGoal(toFollow: path,
+                       maxPredictionTime: 1.0,
+                       forward: true),
+                GKGoal(toAvoid: obstacles,
+                       maxPredictionTime: 1.0)
+            ], andWeights: [0.5, 100])
+            
+            agentComponentSystem.addComponent(agent)
+        }
     }
 }
