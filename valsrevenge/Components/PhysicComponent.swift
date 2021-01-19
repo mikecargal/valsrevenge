@@ -102,17 +102,15 @@ class PhysicsComponent: GKComponent {
 
     override func didAddToEntity() {
         guard let bodyCategory = PhysicsBody.forType(PhysicsCategory(rawValue: bodyCategory)),
-              let bodyShape = PhysicsShape(rawValue:self.bodyShape),
               let sprite = componentNode as? SKSpriteNode
         else { return }
 
         let size = sprite.size
-
-        switch bodyShape {
-        case .rect:
-            componentNode.physicsBody = SKPhysicsBody(rectangleOf: size)
-        case .circle:
-            componentNode.physicsBody = SKPhysicsBody(circleOfRadius: size.height / 2)
+        
+        if bodyShape == PhysicsShape.rect.rawValue {
+          componentNode.physicsBody = SKPhysicsBody(rectangleOf: size)
+        } else if bodyShape == PhysicsShape.circle.rawValue {
+          componentNode.physicsBody = SKPhysicsBody(circleOfRadius: size.height/2)
         }
 
         componentNode.physicsBody?.categoryBitMask = bodyCategory.categoryBitMask

@@ -251,19 +251,6 @@ class GameScene: SKScene {
             obstacles.append(circle)
         }
         if let nodesOnPath = sceneGraph.nodes as? [GKGraphNode2D] {
-            // show the path (optional code)
-//            for (index, node) in nodesOnPath.enumerated() {
-//                let shapeNode = SKShapeNode(circleOfRadius: 10)
-//                shapeNode.fillColor = .green
-//                shapeNode.position = CGPoint(x: CGFloat(node.position.x),
-//                                             y: CGFloat(node.position.y))
-//                // add node number
-//                let number = SKLabelNode(text: "\(index)")
-//                number.position.y = 15
-//                addChild(shapeNode)
-//            }
-            // end optional code
-            
             // create a path to follow
             let path = GKPath(graphNodes: nodesOnPath, radius: 0)
             path.isCyclical = true

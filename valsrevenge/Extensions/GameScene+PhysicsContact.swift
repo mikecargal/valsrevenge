@@ -52,7 +52,7 @@ extension GameScene: SKPhysicsContactDelegate {
         // MARK: - Player | Monster
 
         case PhysicsBody.player.categoryBitMask | PhysicsBody.monster.categoryBitMask:
-            let playerNode = contact.bodyA.categoryBitMask == PhysicsBody.player.contactTestBitMask ?
+            let playerNode = contact.bodyA.categoryBitMask == PhysicsBody.player.categoryBitMask ?
                 contact.bodyA.node : contact.bodyB.node
             if let healthComponent = playerNode?.entity?.component(ofType: HealthComponent.self) {
                 healthComponent.updateHealth(-1, forNode: playerNode)

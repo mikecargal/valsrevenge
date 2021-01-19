@@ -28,8 +28,7 @@ class HealthComponent: GKComponent {
                 hitAction = SKAction.playSoundFileNamed("player_hit", waitForCompletion: false)
                 dieAction = SKAction.run {
                     self.componentNode.run(SKAction.playSoundFileNamed("player_die", waitForCompletion: false)) {
-                        // TODO: add code to restart the game
-                        self.currentHealth = self.maxHealth
+                        self.componentNode.scene?.loadGameOverScene()
                     }
                 }
             } else {
@@ -44,8 +43,8 @@ class HealthComponent: GKComponent {
     }
     
     func updateHealth(_ value: Int, forNode node: SKNode?) {
-        currentHealth += min(value, maxHealth)
-        
+        currentHealth = min(currentHealth+value, maxHealth)
+
         // run hit or die actions
         if value < 0 {
             componentNode.run(currentHealth == 0 ? dieAction : hitAction)
