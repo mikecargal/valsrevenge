@@ -25,6 +25,51 @@ class GameScene: SKScene {
         ])
     
     private var lastUpdateTime: TimeInterval = 0
+    
+    private var leftTouch: UITouch?
+    private var rightTouch: UITouch?
+    
+    lazy var controllerMovement: Controller? = {
+        guard let player = player
+        else { return nil }
+        
+        let stickImage = SKSpriteNode(imageNamed: "player-val-head_0")
+        stickImage.setScale(0.75)
+        let controller = Controller(stickImage: stickImage,
+                                    attachedNode: player,
+                                    nodeSpeed: player.movementSpeed,
+                                    isMovement: true,
+                                    range: 55.0,
+                                    color: .darkGray)
+        controller.setScale(0.65)
+        controller.zPosition += 1
+        controller.anchorLeft()
+        controller.hideLargeArrows()
+        controller.hideSmallArrows()
+        
+        return controller
+    }()
+
+    lazy var controllerAttack: Controller? = {
+        guard let player = player
+        else { return nil }
+        
+        let stickImage = SKSpriteNode(imageNamed: "controller_attack")
+        stickImage.setScale(0.75)
+        let controller = Controller(stickImage: stickImage,
+                                    attachedNode: player,
+                                    nodeSpeed: player.projectileSpeed,
+                                    isMovement: false,
+                                    range: 55.0,
+                                    color: .gray)
+        controller.setScale(0.65)
+        controller.zPosition += 1
+        controller.anchorRight()
+        controller.hideLargeArrows()
+        controller.hideSmallArrows()
+        
+        return controller
+    }()
 
     override func sceneDidLoad() {
         self.lastUpdateTime = 0
@@ -56,57 +101,82 @@ class GameScene: SKScene {
         self.player = childNode(withName: "player") as? Player
         if let player = player {
             player.setupHUD(scene: self)
-            player.move(.stop)
             self.agentComponentSystem.addComponent(player.agent)
+        }
+        if let controllerMovement = controllerMovement {
+            addChild(controllerMovement)
+        }
+        if let controllerAttack = controllerAttack {
+            addChild(controllerAttack)
         }
     }
      
-    func touchDown(atPoint pos: CGPoint) {
-        self.mainGameStateMachine.enter(PlayingState.self)
+    func touchDown(atPoint pos: CGPoint, touch: UITouch) {
+        mainGameStateMachine.enter(PlayingState.self)
+        
         let nodeAtPoint = atPoint(pos)
-        if let touchedNode = nodeAtPoint as? SKSpriteNode {
-            if touchedNode.name?.starts(with: "controller_") == true {
-                let direction = touchedNode.name?.replacingOccurrences(of: "controller_", with: "")
-                self.player?.move(Direction(rawValue: direction ?? "stop")!)
-            } else if touchedNode.name == "button_attack" {
-                self.player?.attack()
+        
+        if let controllerMovement = controllerMovement {
+            if controllerMovement.contains(nodeAtPoint) {
+                leftTouch = touch
+                controllerMovement.beginTracking()
             }
+        }
+        
+        if let controllerAttack = controllerAttack {
+            if controllerAttack.contains(nodeAtPoint) {
+                rightTouch = touch
+                controllerAttack.beginTracking()
+            }
+        }
+        
+        
+    }
+    
+    func touchMoved(toPoint pos: CGPoint, touch: UITouch) {
+        switch touch {
+        case leftTouch:
+            if let controllerMovement = controllerMovement {
+                controllerMovement.moveJoystick(pos: pos)
+            }
+        case rightTouch:
+            if let controllerAttack = controllerAttack {
+                controllerAttack.moveJoystick(pos: pos)
+            }
+        default:
+            break
         }
     }
     
-    func touchMoved(toPoint pos: CGPoint) {
-        let nodeAtPoint = atPoint(pos)
-        if let touchedNode = nodeAtPoint as? SKSpriteNode {
-            if touchedNode.name?.starts(with: "controller_") == true {
-                let direction = touchedNode.name?.replacingOccurrences(of: "controller_", with: "")
-                self.player?.move(Direction(rawValue: direction ?? "stop")!)
+    func touchUp(atPoint pos: CGPoint,touch: UITouch) {
+        switch touch {
+        case leftTouch:
+            if let controllerMovement = controllerMovement {
+                controllerMovement.endTracking()
             }
-        }
-    }
-    
-    func touchUp(atPoint pos: CGPoint) {
-        let nodeAtPoint = atPoint(pos)
-        if let touchedNode = nodeAtPoint as? SKSpriteNode {
-            if touchedNode.name?.starts(with: "controller_") == true {
-                self.player?.stop()
+        case rightTouch:
+            if let controllerAttack = controllerAttack {
+                controllerAttack.endTracking()
             }
+        default:
+            break
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        for t in touches { self.touchDown(atPoint: t.location(in: self),touch: t) }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+        for t in touches { self.touchMoved(toPoint: t.location(in: self),touch: t) }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for t in touches { self.touchUp(atPoint: t.location(in: self),touch:t) }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for t in touches { self.touchUp(atPoint: t.location(in: self),touch:t) }
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -132,32 +202,22 @@ class GameScene: SKScene {
     }
     
     override func didFinishUpdate() {
-        updateControllerLocation()
-        updateHUDLocation()
+        self.updateControllerLocation()
+        self.updateHUDLocation()
     }
     
     func updateControllerLocation() {
-        let controller = childNode(withName: "//controller")
-        controller?.position = CGPoint(
-            x: viewLeft +
-                self.margin +
-                insets.left,
-            y: viewBottom +
-                self.margin +
-                insets.bottom)
-        let attackButton = childNode(withName: "//attackButton")
-        attackButton?.position = CGPoint(
-            x: viewRight -
-                self.margin -
-                insets.right,
-            y: viewBottom +
-                self.margin +
-                insets.bottom)
+        self.controllerMovement?.position = CGPoint(
+            x: viewLeft + self.margin + insets.left,
+            y: viewBottom + self.margin + insets.bottom)
+        self.controllerAttack?.position = CGPoint(
+            x: viewRight - self.margin - insets.right,
+            y: viewBottom + self.margin + insets.bottom)
     }
     
     func updateHUDLocation() {
-        player?.hud.position = CGPoint(x: (viewRight - margin - insets.right),
-                                       y: (viewTop-margin-insets.top))
+        self.player?.hud.position = CGPoint(x: viewRight - self.margin - insets.right,
+                                            y: viewTop - self.margin - insets.top)
     }
     
     func startAdvancedNavigation() {
@@ -185,7 +245,7 @@ class GameScene: SKScene {
             node, _ in
             
             // create compoatible obstacle
-            let circle = GKCircleObstacle(radius: Float(node.frame.size.width / 2))
+            let circle = GKCircleObstacle(radius: Float(node.frame.size.width/2))
             circle.position = vector_float2(Float(node.position.x),
                                             Float(node.position.y))
             obstacles.append(circle)
@@ -217,7 +277,7 @@ class GameScene: SKScene {
                        maxPredictionTime: 1.0)
             ], andWeights: [0.5, 100])
             
-            agentComponentSystem.addComponent(agent)
+            self.agentComponentSystem.addComponent(agent)
         }
     }
 }
