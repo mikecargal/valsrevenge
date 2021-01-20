@@ -8,7 +8,24 @@
 import GameplayKit
 import SpriteKit
 
+enum ImageNames: String {
+    case playerHead0 = "player-val-head_0"
+    case attackController = "controller_attack"
+}
+
+enum Names: String {
+    case grassTileMap = "Grass Tile Map"
+    case dungeonTileMap = "Dungeon Tile Map"
+    case player = "player"
+    case key = "key"
+    case anyGenerator = "generator_*"
+}
+
 class GameScene: SKScene {
+    let controllerRange: CGFloat = 55
+    let controllerScale: CGFloat = 0.65
+    let controllerStickScale: CGFloat = 0.75
+    
     var entities = [GKEntity]()
     var graphs = [String: GKGraph]()
     
@@ -30,18 +47,17 @@ class GameScene: SKScene {
     private var rightTouch: UITouch?
     
     lazy var controllerMovement: Controller? = {
-        guard let player = player
-        else { return nil }
+        guard let player = player else { return nil }
         
-        let stickImage = SKSpriteNode(imageNamed: "player-val-head_0")
-        stickImage.setScale(0.75)
+        let stickImage = SKSpriteNode(imageNamed: ImageNames.playerHead0.rawValue)
+        stickImage.setScale(controllerStickScale)
         let controller = Controller(stickImage: stickImage,
                                     attachedNode: player,
                                     nodeSpeed: player.movementSpeed,
                                     isMovement: true,
-                                    range: 55.0,
+                                    range: controllerRange,
                                     color: .darkGray)
-        controller.setScale(0.65)
+        controller.setScale(controllerScale)
         controller.zPosition += 1
         controller.anchorLeft()
         controller.hideLargeArrows()
@@ -51,18 +67,17 @@ class GameScene: SKScene {
     }()
 
     lazy var controllerAttack: Controller? = {
-        guard let player = player
-        else { return nil }
+        guard let player = player else { return nil }
         
-        let stickImage = SKSpriteNode(imageNamed: "controller_attack")
-        stickImage.setScale(0.75)
+        let stickImage = SKSpriteNode(imageNamed: ImageNames.attackController.rawValue)
+        stickImage.setScale(controllerStickScale)
         let controller = Controller(stickImage: stickImage,
                                     attachedNode: player,
                                     nodeSpeed: player.projectileSpeed,
                                     isMovement: false,
-                                    range: 55.0,
+                                    range: controllerRange,
                                     color: .gray)
-        controller.setScale(0.65)
+        controller.setScale(controllerScale)
         controller.zPosition += 1
         controller.anchorRight()
         controller.hideLargeArrows()
@@ -81,10 +96,10 @@ class GameScene: SKScene {
         self.setupPlayer()
         self.setupCamera()
         
-        let grassMapNode = childNode(withName: "Grass Tile Map") as? SKTileMapNode
+        let grassMapNode = childNode(withName: Names.grassTileMap.rawValue) as? SKTileMapNode
         grassMapNode?.setupEdgeLoop()
         
-        let dungeonMapNode = childNode(withName: "Dungeon Tile Map") as? SKTileMapNode
+        let dungeonMapNode = childNode(withName: Names.dungeonTileMap.rawValue) as? SKTileMapNode
         dungeonMapNode?.setupMapPhysics()
         physicsWorld.contactDelegate = self
         self.startAdvancedNavigation()
@@ -92,13 +107,14 @@ class GameScene: SKScene {
 
     func setupCamera() {
         guard let player = player else { return }
-        let distance = SKRange(constantValue: 0)
-        let playerConstraint = SKConstraint.distance(distance, to: player)
-        camera?.constraints = [playerConstraint]
+        
+        camera?.constraints = [
+            SKConstraint.distance(SKRange(constantValue: 0), to: player)
+        ]
     }
     
     func setupPlayer() {
-        self.player = childNode(withName: "player") as? Player
+        self.player = childNode(withName: Names.player.rawValue) as? Player
         if let player = player {
             player.setupHUD(scene: self)
             self.agentComponentSystem.addComponent(player.agent)
@@ -112,34 +128,32 @@ class GameScene: SKScene {
     }
      
     func touchDown(atPoint pos: CGPoint, touch: UITouch) {
-        mainGameStateMachine.enter(PlayingState.self)
+        self.mainGameStateMachine.enter(PlayingState.self)
         
         let nodeAtPoint = atPoint(pos)
         
         if let controllerMovement = controllerMovement {
             if controllerMovement.contains(nodeAtPoint) {
-                leftTouch = touch
+                self.leftTouch = touch
                 controllerMovement.beginTracking()
             }
         }
         
         if let controllerAttack = controllerAttack {
             if controllerAttack.contains(nodeAtPoint) {
-                rightTouch = touch
+                self.rightTouch = touch
                 controllerAttack.beginTracking()
             }
         }
-        
-        
     }
     
     func touchMoved(toPoint pos: CGPoint, touch: UITouch) {
         switch touch {
-        case leftTouch:
+        case self.leftTouch:
             if let controllerMovement = controllerMovement {
                 controllerMovement.moveJoystick(pos: pos)
             }
-        case rightTouch:
+        case self.rightTouch:
             if let controllerAttack = controllerAttack {
                 controllerAttack.moveJoystick(pos: pos)
             }
@@ -148,13 +162,13 @@ class GameScene: SKScene {
         }
     }
     
-    func touchUp(atPoint pos: CGPoint,touch: UITouch) {
+    func touchUp(atPoint pos: CGPoint, touch: UITouch) {
         switch touch {
-        case leftTouch:
+        case self.leftTouch:
             if let controllerMovement = controllerMovement {
                 controllerMovement.endTracking()
             }
-        case rightTouch:
+        case self.rightTouch:
             if let controllerAttack = controllerAttack {
                 controllerAttack.endTracking()
             }
@@ -164,19 +178,19 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self),touch: t) }
+        for t in touches { self.touchDown(atPoint: t.location(in: self), touch: t) }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self),touch: t) }
+        for t in touches { self.touchMoved(toPoint: t.location(in: self), touch: t) }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self),touch:t) }
+        for t in touches { self.touchUp(atPoint: t.location(in: self), touch: t) }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self),touch:t) }
+        for t in touches { self.touchUp(atPoint: t.location(in: self), touch: t) }
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -223,7 +237,7 @@ class GameScene: SKScene {
     func startAdvancedNavigation() {
         // check for a navigation graph and a key
         guard let sceneGraph = graphs.values.first,
-              let keyNode = childNode(withName: "key") as? SKSpriteNode
+              let keyNode = childNode(withName: Names.key.rawValue) as? SKSpriteNode
         else { return }
         
         let agent = GKAgent2D()
@@ -241,11 +255,11 @@ class GameScene: SKScene {
         
         // Find obstacles (generators)
         var obstacles = [GKCircleObstacle]()
-        enumerateChildNodes(withName: "generator_*") {
+        enumerateChildNodes(withName: Names.anyGenerator.rawValue) {
             node, _ in
             
-            // create compoatible obstacle
-            let circle = GKCircleObstacle(radius: Float(node.frame.size.width/2))
+            // create compatible obstacle
+            let circle = GKCircleObstacle(radius: Float(node.frame.size.width / 2))
             circle.position = vector_float2(Float(node.position.x),
                                             Float(node.position.y))
             obstacles.append(circle)
