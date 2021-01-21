@@ -153,11 +153,11 @@ class GameScene: SKScene {
     
     func touchMoved(toPoint pos: CGPoint, touch: UITouch) {
         switch touch {
-        case self.leftTouch:
+        case leftTouch:
             if let controllerMovement = controllerMovement {
                 controllerMovement.moveJoystick(pos: pos)
             }
-        case self.rightTouch:
+        case rightTouch:
             if let controllerAttack = controllerAttack {
                 controllerAttack.moveJoystick(pos: pos)
             }
@@ -168,11 +168,11 @@ class GameScene: SKScene {
     
     func touchUp(atPoint pos: CGPoint, touch: UITouch) {
         switch touch {
-        case self.leftTouch:
+        case leftTouch:
             if let controllerMovement = controllerMovement {
                 controllerMovement.endTracking()
             }
-        case self.rightTouch:
+        case rightTouch:
             if let controllerAttack = controllerAttack {
                 controllerAttack.endTracking()
             }
@@ -182,60 +182,60 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self), touch: t) }
+        for t in touches { touchDown(atPoint: t.location(in: self), touch: t) }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self), touch: t) }
+        for t in touches { touchMoved(toPoint: t.location(in: self), touch: t) }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self), touch: t) }
+        for t in touches { touchUp(atPoint: t.location(in: self), touch: t) }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self), touch: t) }
+        for t in touches { touchUp(atPoint: t.location(in: self), touch: t) }
     }
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         
         // Initialize _lastUpdateTime if it has not already been
-        if self.lastUpdateTime == 0 {
-            self.lastUpdateTime = currentTime
+        if lastUpdateTime == 0 {
+            lastUpdateTime = currentTime
         }
         
         // Calculate time since last update
-        let dt = currentTime - self.lastUpdateTime
+        let dt = currentTime - lastUpdateTime
         
         // update the component system
-        self.agentComponentSystem.update(deltaTime: dt)
+        agentComponentSystem.update(deltaTime: dt)
         
         // Update entities
-        for entity in self.entities {
+        for entity in entities {
             entity.update(deltaTime: dt)
         }
         
-        self.lastUpdateTime = currentTime
+        lastUpdateTime = currentTime
     }
     
     override func didFinishUpdate() {
-        self.updateControllerLocation()
-        self.updateHUDLocation()
+        updateControllerLocation()
+        updateHUDLocation()
     }
     
     func updateControllerLocation() {
-        self.controllerMovement?.position = CGPoint(
-            x: viewLeft + self.margin + insets.left,
-            y: viewBottom + self.margin + insets.bottom)
-        self.controllerAttack?.position = CGPoint(
-            x: viewRight - self.margin - insets.right,
-            y: viewBottom + self.margin + insets.bottom)
+        controllerMovement?.position = CGPoint(
+            x: viewLeft + margin + insets.left,
+            y: viewBottom + margin + insets.bottom)
+        controllerAttack?.position = CGPoint(
+            x: viewRight - margin - insets.right,
+            y: viewBottom + margin + insets.bottom)
     }
     
     func updateHUDLocation() {
-        self.player?.hud.position = CGPoint(x: viewRight - self.margin - insets.right,
-                                            y: viewTop - self.margin - insets.top)
+        player?.hud.position = CGPoint(x: viewRight - margin - insets.right,
+                                            y: viewTop - margin - insets.top)
     }
     
     func startAdvancedNavigation() {

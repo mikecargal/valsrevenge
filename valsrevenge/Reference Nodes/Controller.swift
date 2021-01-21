@@ -75,25 +75,22 @@ class Controller: SKReferenceNode {
         base.position = CGPoint(x: 175.0, y: 175.0)
     }
     
+    func hideNodeWithName(_ name: Names) {
+        if let node = childNode(withName: "//\(name.rawValue)") as? SKSpriteNode { node.isHidden = true }
+        
+    }
     func hideLargeArrows() {
-        if let node = childNode(withName: "//\(Names.controllerLeft.rawValue)") as? SKSpriteNode { node.isHidden = true
-        }
-        if let node = childNode(withName: "//\(Names.controllerRight.rawValue)") as? SKSpriteNode { node.isHidden = true
-        }
-        if let node = childNode(withName: "//\(Names.controllerUp.rawValue)") as? SKSpriteNode { node.isHidden = true
-        }
-        if let node = childNode(withName: "//\(Names.controllerDown.rawValue)") as? SKSpriteNode { node.isHidden = true }
+        hideNodeWithName(.controllerLeft)
+        hideNodeWithName(.controllerRight)
+        hideNodeWithName(.controllerUp)
+        hideNodeWithName(.controllerDown)
     }
     
     func hideSmallArrows() {
-        if let node = childNode(withName: "//\(Names.controllerTopLeft.rawValue)") as? SKSpriteNode { node.isHidden = true
-        }
-        if let node = childNode(withName: "//\(Names.controllerTopRight.rawValue)") as? SKSpriteNode { node.isHidden = true
-        }
-        if let node = childNode(withName: "//\(Names.controllerBottomLeft.rawValue)") as? SKSpriteNode { node.isHidden = true
-        }
-        if let node = childNode(withName: "//\(Names.controllerBottomRight.rawValue)") as? SKSpriteNode { node.isHidden = true
-        }
+        hideNodeWithName(.controllerTopLeft)
+        hideNodeWithName(.controllerTopRight)
+        hideNodeWithName(.controllerBottomLeft)
+        hideNodeWithName(.controllerBottomRight)
     }
     
     // <ARK: - Controller Methods
@@ -109,18 +106,13 @@ class Controller: SKReferenceNode {
     }
     
     func moveJoystick(pos: CGPoint) {
-        var location = pos
-        
-        // verify the player is using the on-screen controls
-        if isTracking {
-            location = base.convert(pos, from: scene!)
-        }
+        let location =  isTracking ? base.convert(pos, from: scene!) : CGPoint()
+        joystick.position = location
         
         // move the joystick node
-        let xAxis = CGFloat(location.x.clamped(to: -range...range))
-        let yAxis = CGFloat(location.y.clamped(to: -range...range))
-        joystick.position = CGPoint(x: location.x,
-                                    y: location.y)
+        let xAxis = location.x.clamped(to: -range...range)
+        let yAxis = location.y.clamped(to: -range...range)
+
         if isMovement {
             moveAttachedNode(direction: CGVector(dx: xAxis, dy: yAxis))
         } else {
@@ -130,8 +122,8 @@ class Controller: SKReferenceNode {
     
     func moveAttachedNode(direction: CGVector) {
         attachedNode.physicsBody?.velocity =
-            CGVector(dx: CGFloat(direction.dx * nodeSpeed),
-                     dy: CGFloat(direction.dy * nodeSpeed))
+            CGVector(dx: direction.dx * nodeSpeed,
+                     dy: direction.dy * nodeSpeed)
     }
     
     func otherAction(direction: CGVector) {

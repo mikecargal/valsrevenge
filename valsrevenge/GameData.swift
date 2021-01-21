@@ -48,10 +48,8 @@ class GameData: NSObject, Codable {
         
         // Restore data (properties)
         level = gd.level
-        
         keys = gd.keys
         treasure = gd.treasure
-        
       }
     } catch {
       print("Couldn't load Store Data file.")
