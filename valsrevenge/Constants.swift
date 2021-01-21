@@ -34,5 +34,6 @@ enum Names: String {
 enum FileNames: String {
     case controller = "Controller"
     case gameData = "gameData.json"
-    case music 
+    case music
+    case gameOverScene = "GameOverScene"
 }

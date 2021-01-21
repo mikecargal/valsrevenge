@@ -11,7 +11,8 @@ extension SKTileMapNode {
     func setupEdgeLoop() {
         let mapPoint = CGPoint(x: -frame.size.width/2,
                                y: -frame.size.height/2 )
-        let mapSize = CGSize(width: frame.size.width, height: frame.size.height)
+        let mapSize = CGSize(width: frame.size.width,
+                             height: frame.size.height)
         let edgeLoopRect = CGRect(origin: mapPoint, size: mapSize)
         
         // set up physics body
