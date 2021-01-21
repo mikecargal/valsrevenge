@@ -12,11 +12,15 @@ import GameplayKit
 extension SKScene {
   
   func startNewGame() {
-    loadSceneForLevel(1)
+    GameData.shared.level = 1
+    GameData.shared.keys = 0
+    GameData.shared.treasure = 0
+    
+    loadSceneForLevel(GameData.shared.level)
   }
   
   func resumeSavedGame() {
-    // TODO: Add code to load previously saved game
+    loadSceneForLevel(GameData.shared.level)
   }
   
   func loadSceneForLevel(_ level: Int) {

@@ -28,20 +28,24 @@ class Player: SKSpriteNode {
     private let treasureLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
     private let keysLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
 
-    private var keys: Int = 0 {
+    private var keys: Int = GameData.shared.keys {
         didSet {
             keysLabel.text = "Keys: \(keys)"
             stateMachine.enter(keys < 1 ? PlayerHasNoKeyState.self : PlayerHasKeyState.self)
         }
     }
 
-    private var treasure: Int = 0 {
+    private var treasure: Int = GameData.shared.treasure {
         didSet {
             treasureLabel.text = "Treasure: \(treasure)"
             print("Treasure: \(treasure)")
         }
     }
 
+    func getStats() -> (keys: Int, treasure: Int) {
+        return (keys,treasure)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         agent.delegate = self

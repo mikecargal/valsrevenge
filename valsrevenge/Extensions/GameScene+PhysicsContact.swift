@@ -52,8 +52,8 @@ extension GameScene: SKPhysicsContactDelegate {
         // MARK: - Player | Monster
 
         case PhysicsBody.player.categoryBitMask | PhysicsBody.monster.categoryBitMask:
-            let playerNode = contact.bodyA.categoryBitMask == PhysicsBody.player.categoryBitMask ?
-                contact.bodyA.node : contact.bodyB.node
+            let playerNode = contact.bodyA.categoryBitMask == PhysicsBody.player.categoryBitMask
+                ? contact.bodyA.node : contact.bodyB.node
             if let healthComponent = playerNode?.entity?.component(ofType: HealthComponent.self) {
                 healthComponent.updateHealth(-1, forNode: playerNode)
             }
@@ -68,6 +68,19 @@ extension GameScene: SKPhysicsContactDelegate {
                 healthComponent.updateHealth(-1, forNode: monsterNode)
             }
 
+            // MARK: - Player | Platform
+
+        case PhysicsBody.player.categoryBitMask | PhysicsBody.exit.categoryBitMask:
+            let playerNode = contact.bodyA.categoryBitMask == PhysicsBody.player.categoryBitMask
+                ? contact.bodyA.node : contact.bodyB.node
+            // update teh saved stats
+            if let player = playerNode as? Player {
+                GameData.shared.keys = player.getStats().keys
+                GameData.shared.treasure = player.getStats().treasure
+            }
+            
+            GameData.shared.level += 1
+            loadSceneForLevel(GameData.shared.level)
         default:
             break
         }

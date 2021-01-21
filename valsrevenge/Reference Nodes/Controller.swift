@@ -31,7 +31,7 @@ class Controller: SKReferenceNode {
         self.init(fileNamed: FileNames.controller.rawValue)
         
         // setup the joystick
-        joystick = childNode(withName: "//\(Names.controlerStick)") as? SKSpriteNode
+        joystick = childNode(withName: "//\(Names.controllerStick.rawValue)") as? SKSpriteNode
         joystick.zPosition += 1
         if let stickImage = stickImage {
             joystick.addChild(stickImage)

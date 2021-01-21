@@ -18,7 +18,7 @@ enum Names: String {
     case anyGenerator = "generator_*"
     case newGameButton
     case loadGameButton
-    case controlerStick = "controller_stick"
+    case controllerStick = "controller_stick"
     case controllerMain = "controller_main"
     case controllerLeft = "controller_left"
     case controllerRight = "controller_right"
@@ -32,4 +32,5 @@ enum Names: String {
 
 enum FileNames: String {
     case controller = "Controller"
+    case gameData = "gameData.json"
 }

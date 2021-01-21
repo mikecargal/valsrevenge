@@ -75,6 +75,7 @@ class GameScene: SKScene {
     }()
 
     override func sceneDidLoad() {
+        GameData.shared.saveDataWithFileName(FileNames.gameData.rawValue)
         self.lastUpdateTime = 0
     }
     
