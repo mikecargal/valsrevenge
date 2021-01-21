@@ -114,6 +114,21 @@ class GameScene: SKScene {
         if let controllerAttack = controllerAttack {
             addChild(controllerAttack)
         }
+        setupMusic()
+    }
+    
+    func setupMusic() {
+        let musicNode = SKAudioNode(fileNamed: FileNames.music.rawValue)
+        musicNode.isPositional = false
+        
+        // make the audio node positional so that the music gets
+        // louder as the player gets closer to the music
+        if let exit = childNode(withName: Names.exit.rawValue) {
+            musicNode.position = exit.position
+            musicNode.isPositional = true
+            listener = player
+        }
+        addChild(musicNode)
     }
      
     func touchDown(atPoint pos: CGPoint, touch: UITouch) {

@@ -15,6 +15,7 @@ enum Names: String {
     case dungeonTileMap = "Dungeon Tile Map"
     case player
     case key
+    case exit
     case anyGenerator = "generator_*"
     case newGameButton
     case loadGameButton
@@ -33,4 +34,5 @@ enum Names: String {
 enum FileNames: String {
     case controller = "Controller"
     case gameData = "gameData.json"
+    case music 
 }
