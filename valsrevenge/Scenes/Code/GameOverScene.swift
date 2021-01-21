@@ -15,8 +15,8 @@ class GameOverScene: SKScene {
   private var loadGameButton: SKSpriteNode!
   
   override func didMove(to view: SKView) {
-    newGameButton = childNode(withName: "newGameButton") as? SKSpriteNode
-    loadGameButton = childNode(withName: "loadGameButton") as? SKSpriteNode
+    newGameButton = childNode(withName: Names.newGameButton.rawValue) as? SKSpriteNode
+    loadGameButton = childNode(withName:Names.loadGameButton.rawValue) as? SKSpriteNode
   }
   
   // MARK: - TOUCH HANDLERS

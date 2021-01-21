@@ -28,17 +28,17 @@ class Controller: SKReferenceNode {
                      range: CGFloat = 55.0,
                      color: SKColor = .darkGray)
     {
-        self.init(fileNamed: "Controller")
+        self.init(fileNamed: FileNames.controller.rawValue)
         
         // setup the joystick
-        joystick = childNode(withName: "//controller_stick") as? SKSpriteNode
+        joystick = childNode(withName: "//\(Names.controlerStick)") as? SKSpriteNode
         joystick.zPosition += 1
         if let stickImage = stickImage {
             joystick.addChild(stickImage)
         }
         
         // set up inner base shape
-        base = joystick.childNode(withName: "//controller_main")
+        base = joystick.childNode(withName: "//\(Names.controllerMain.rawValue)")
         let innerBase = SKShapeNode(circleOfRadius: range * 2)
         innerBase.strokeColor = .black
         innerBase.fillColor = color
@@ -76,17 +76,24 @@ class Controller: SKReferenceNode {
     }
     
     func hideLargeArrows() {
-        if let node = childNode(withName: "//controller_left") as? SKSpriteNode { node.isHidden = true }
-        if let node = childNode(withName: "//controller_right") as? SKSpriteNode { node.isHidden = true }
-        if let node = childNode(withName: "//controller_up") as? SKSpriteNode { node.isHidden = true }
-        if let node = childNode(withName: "//controller_down") as? SKSpriteNode { node.isHidden = true }
+        if let node = childNode(withName: "//\(Names.controllerLeft.rawValue)") as? SKSpriteNode { node.isHidden = true
+        }
+        if let node = childNode(withName: "//\(Names.controllerRight.rawValue)") as? SKSpriteNode { node.isHidden = true
+        }
+        if let node = childNode(withName: "//\(Names.controllerUp.rawValue)") as? SKSpriteNode { node.isHidden = true
+        }
+        if let node = childNode(withName: "//\(Names.controllerDown.rawValue)") as? SKSpriteNode { node.isHidden = true }
     }
     
     func hideSmallArrows() {
-        if let node = childNode(withName: "//controller_topLeft") as? SKSpriteNode { node.isHidden = true }
-        if let node = childNode(withName: "//controller_topRight") as? SKSpriteNode { node.isHidden = true }
-        if let node = childNode(withName: "//controller_bottomLeft") as? SKSpriteNode { node.isHidden = true }
-        if let node = childNode(withName: "//controller_bottomRight") as? SKSpriteNode { node.isHidden = true }
+        if let node = childNode(withName: "//\(Names.controllerTopLeft.rawValue)") as? SKSpriteNode { node.isHidden = true
+        }
+        if let node = childNode(withName: "//\(Names.controllerTopRight.rawValue)") as? SKSpriteNode { node.isHidden = true
+        }
+        if let node = childNode(withName: "//\(Names.controllerBottomLeft.rawValue)") as? SKSpriteNode { node.isHidden = true
+        }
+        if let node = childNode(withName: "//\(Names.controllerBottomRight.rawValue)") as? SKSpriteNode { node.isHidden = true
+        }
     }
     
     // <ARK: - Controller Methods
@@ -106,7 +113,7 @@ class Controller: SKReferenceNode {
         
         // verify the player is using the on-screen controls
         if isTracking {
-            location = base.convert(pos, from: self.scene!)
+            location = base.convert(pos, from: scene!)
         }
         
         // move the joystick node
@@ -123,13 +130,13 @@ class Controller: SKReferenceNode {
     
     func moveAttachedNode(direction: CGVector) {
         attachedNode.physicsBody?.velocity =
-            CGVector(dx: CGFloat(direction.dx*nodeSpeed),
-                     dy: CGFloat(direction.dy*nodeSpeed))
+            CGVector(dx: CGFloat(direction.dx * nodeSpeed),
+                     dy: CGFloat(direction.dy * nodeSpeed))
     }
     
     func otherAction(direction: CGVector) {
         guard let player = attachedNode as? Player
-        else {return}
+        else { return }
         player.attack(direction: direction)
     }
 }

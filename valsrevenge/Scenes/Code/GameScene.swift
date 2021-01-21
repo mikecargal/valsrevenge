@@ -8,18 +8,6 @@
 import GameplayKit
 import SpriteKit
 
-enum ImageNames: String {
-    case playerHead0 = "player-val-head_0"
-    case attackController = "controller_attack"
-}
-
-enum Names: String {
-    case grassTileMap = "Grass Tile Map"
-    case dungeonTileMap = "Dungeon Tile Map"
-    case player = "player"
-    case key = "key"
-    case anyGenerator = "generator_*"
-}
 
 class GameScene: SKScene {
     let controllerRange: CGFloat = 55
