@@ -13,7 +13,7 @@ class AgentComponent: GKComponent {
     
     lazy var interceptionGoal: GKGoal = {
         guard let scene = componentNode.scene as? GameScene,
-              let player = scene.childNode(withName: "Player") as? Player
+              let player = scene.childNode(withName: Names.player.rawValue) as? Player
         else { return GKGoal(toWander: 1.0) }
         
         return GKGoal(toInterceptAgent: player.agent, maxPredictionTime: 1.0)
@@ -41,7 +41,7 @@ class AgentComponent: GKComponent {
     
     override func update(deltaTime seconds: TimeInterval) {
         guard let scene = componentNode.scene as? GameScene,
-              let player = scene.childNode(withName: "player") as? Player
+              let player = scene.childNode(withName:Names.player.rawValue) as? Player
         else { return }
         
         agent.behavior?.setWeight(

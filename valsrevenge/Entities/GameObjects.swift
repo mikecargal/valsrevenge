@@ -33,36 +33,36 @@ enum GameObject {
 
     struct Goblin {
         let animationSettings = Animation(
-            textures: SKTexture.loadTextures(atlas: "monster_goblin",
-                                             prefix: "goblin_",
+            textures: SKTexture.loadTextures(atlas: AtlasNames.monsterGoblin,
+                                             prefix: TexturePrefixes.goblin,
                                              startsAt: 0, stopsAt: 1))
     }
 
     struct Skeleton {
         let animationSettings = Animation(
-            textures: SKTexture.loadTextures(atlas: "monster_skeleton",
-                                             prefix: "skeleton_",
+            textures: SKTexture.loadTextures(atlas: AtlasNames.monsterSkeleton,
+                                             prefix: TexturePrefixes.skeleton,
                                              startsAt: 0, stopsAt: 1),
             timePerFrame: TimeInterval(1.0 / 25.0))
     }
 
     struct Key {
         let collectibleSettings = Collectible(type: .key,
-                                              collectSound: "key",
-                                              destroySound: "destroyed")
+                                              collectSound: Sounds.key,
+                                              destroySound: Sounds.destroyed )
     }
 
     struct Food {
         let collectibleSettings = Collectible(type: .food,
-                                              collectSound: "food",
-                                              destroySound: "destroyed",
+                                              collectSound: Sounds.food,
+                                              destroySound: Sounds.destroyed,
                                               canDestroy: true)
     }
 
     struct Treasure {
         let collectibleSettings = Collectible(type: .treasure,
-                                              collectSound: "treasure",
-                                              destroySound: "destroyed")
+                                              collectSound: Sounds.treasure,
+                                              destroySound: Sounds.destroyed)
     }
 
     static func forAnimationType(_ type: GameObjectType?) -> Animation? {

@@ -12,29 +12,29 @@ class HealthComponent: GKComponent {
     @GKInspectable var currentHealth: Int = 3
     @GKInspectable var maxHealth: Int = 3
     
-    private let healthFull = SKTexture(imageNamed: "health_full")
-    private let healthEmpty = SKTexture(imageNamed: "health_empty")
+    private let healthFull = SKTexture(imageNamed: ImageNames.healthFull.rawValue)
+    private let healthEmpty = SKTexture(imageNamed: ImageNames.healthEmpty.rawValue)
     
     private var hitAction = SKAction()
     private var dieAction = SKAction()
     
     override func didAddToEntity() {
-        if let healthMeter = SKReferenceNode(fileNamed: "HealthMeter") {
+        if let healthMeter = SKReferenceNode(fileNamed: FileNames.healthMeter.rawValue) {
             healthMeter.position = CGPoint(x: 0, y: 100)
             componentNode.addChild(healthMeter)
             updateHealth(0, forNode: componentNode)
             
             if let _ = componentNode as? Player {
-                hitAction = SKAction.playSoundFileNamed("player_hit", waitForCompletion: false)
+                hitAction = SKAction.playSoundFileNamed(Sounds.playerHit.rawValue, waitForCompletion: false)
                 dieAction = SKAction.run {
-                    self.componentNode.run(SKAction.playSoundFileNamed("player_die", waitForCompletion: false)) {
+                    self.componentNode.run(SKAction.playSoundFileNamed(Sounds.playerDie.rawValue, waitForCompletion: false)) {
                         self.componentNode.scene?.loadGameOverScene()
                     }
                 }
             } else {
-                hitAction = SKAction.playSoundFileNamed("monster_hit", waitForCompletion: false)
+                hitAction = SKAction.playSoundFileNamed(Sounds.monsterHit.rawValue, waitForCompletion: false)
                 dieAction = SKAction.run {
-                    self.componentNode.run(SKAction.playSoundFileNamed("monster_die", waitForCompletion: false)) {
+                    self.componentNode.run(SKAction.playSoundFileNamed(Sounds.monsterDie.rawValue, waitForCompletion: false)) {
                         self.componentNode.removeFromParent()
                     }
                 }
@@ -43,7 +43,7 @@ class HealthComponent: GKComponent {
     }
     
     func updateHealth(_ value: Int, forNode node: SKNode?) {
-        currentHealth = min(currentHealth+value, maxHealth)
+        currentHealth = min(currentHealth + value, maxHealth)
 
         // run hit or die actions
         if value < 0 {

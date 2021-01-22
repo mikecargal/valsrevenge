@@ -106,11 +106,11 @@ class PhysicsComponent: GKComponent {
         else { return }
 
         let size = sprite.size
-        
-        if bodyShape == PhysicsShape.rect.rawValue {
-          componentNode.physicsBody = SKPhysicsBody(rectangleOf: size)
-        } else if bodyShape == PhysicsShape.circle.rawValue {
-          componentNode.physicsBody = SKPhysicsBody(circleOfRadius: size.height/2)
+
+        if self.bodyShape == PhysicsShape.rect.rawValue {
+            componentNode.physicsBody = SKPhysicsBody(rectangleOf: size)
+        } else if self.bodyShape == PhysicsShape.circle.rawValue {
+            componentNode.physicsBody = SKPhysicsBody(circleOfRadius: size.height / 2)
         }
 
         componentNode.physicsBody?.categoryBitMask = bodyCategory.categoryBitMask

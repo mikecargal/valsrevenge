@@ -25,8 +25,8 @@ class Player: SKSpriteNode {
     var agent = GKAgent2D()
 
     var hud = SKNode()
-    private let treasureLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
-    private let keysLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
+    private let treasureLabel = SKLabelNode(fontNamed: FontNames.AvenirNextBold.rawValue)
+    private let keysLabel = SKLabelNode(fontNamed: FontNames.AvenirNextBold.rawValue)
 
     private var keys: Int = GameData.shared.keys {
         didSet {
@@ -43,9 +43,9 @@ class Player: SKSpriteNode {
     }
 
     func getStats() -> (keys: Int, treasure: Int) {
-        return (keys,treasure)
+        return (keys, treasure)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         agent.delegate = self
@@ -97,14 +97,14 @@ class Player: SKSpriteNode {
         if stateMachine.currentState is PlayerHasKeyState {
             keys -= 1
             doorNode.removeFromParent()
-            run(SKAction.playSoundFileNamed("door_open", waitForCompletion: true))
+            run(SKAction.playSoundFileNamed(FileNames.doorOpen.rawValue, waitForCompletion: true))
         }
     }
 
     func attack(direction: CGVector) {
         if direction != .zero, numProjectiles < maxProjectiles {
             numProjectiles += 1
-            let projectile = SKSpriteNode(imageNamed: "knife")
+            let projectile = SKSpriteNode(imageNamed: Names.knife.rawValue)
             projectile.position = CGPoint(x: 0.0, y: 0.0)
             projectile.zPosition += 1
             addChild(projectile)
@@ -114,28 +114,30 @@ class Player: SKSpriteNode {
             physicsBody.allowsRotation = true
             physicsBody.isDynamic = true
 
-            physicsBody.categoryBitMask = PhysicsBody.projectile.categoryBitMask
-            physicsBody.contactTestBitMask = PhysicsBody.projectile.contactTestBitMask
-            physicsBody.collisionBitMask = PhysicsBody.projectile.collisionBitMask
+            let pb = PhysicsBody.projectile
+            physicsBody.categoryBitMask = pb.categoryBitMask
+            physicsBody.contactTestBitMask = pb.contactTestBitMask
+            physicsBody.collisionBitMask = pb.collisionBitMask
 
             projectile.physicsBody = physicsBody
 
-            // set up the throw direction
-            let throwDirection = CGVector(dx: direction.dx * projectileSpeed,
-                                          dy: direction.dy * projectileSpeed)
+            projectile.run(SKAction.group([
+                SKAction.sequence([
+                    SKAction.wait(forDuration: projectileRange),
+                    SKAction.removeFromParent()
+                ]),
+                SKAction.group([
+                    SKAction.applyTorque(0.25, duration: projectileRange),
+                    SKAction.move(by: CGVector(dx: direction.dx * projectileSpeed,
+                                               dy: direction.dy * projectileSpeed),
+                                  duration: projectileRange)
+                ])
+            ]))
 
-            let wait = SKAction.wait(forDuration: projectileRange)
-            let removeFromScene = SKAction.removeFromParent()
-            let spin = SKAction.applyTorque(0.25, duration: projectileRange)
-            let toss = SKAction.move(by: throwDirection, duration: projectileRange)
-            let actionTTL = SKAction.sequence([wait, removeFromScene])
-            let actionThrow = SKAction.group([spin, toss])
-            let actionAttack = SKAction.group([actionTTL, actionThrow])
-            projectile.run(actionAttack)
-
-            let reduceCount = SKAction.run { self.numProjectiles -= 1 }
-            let reduceSequence = SKAction.sequence([attackDelay, reduceCount])
-            run(reduceSequence)
+            run(SKAction.sequence([
+                attackDelay,
+                SKAction.run { self.numProjectiles -= 1 }
+            ]))
         }
     }
 }

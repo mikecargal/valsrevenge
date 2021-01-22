@@ -8,6 +8,8 @@
 enum ImageNames: String {
     case playerHead0 = "player-val-head_0"
     case attackController = "controller_attack"
+    case healthFull = "health_full"
+    case healthEmpty = "health_empty"
 }
 
 enum Names: String {
@@ -16,6 +18,8 @@ enum Names: String {
     case player
     case key
     case exit
+    case knife
+    case destrooyed
     case anyGenerator = "generator_*"
     case newGameButton
     case loadGameButton
@@ -29,6 +33,7 @@ enum Names: String {
     case controllerTopRight = "controller_topRight"
     case controllerBottomLeft = "controller_bottomLeft"
     case controllerBottomRight = "controller_bottomRight"
+    case spawnMonster
 }
 
 enum FileNames: String {
@@ -36,4 +41,31 @@ enum FileNames: String {
     case gameData = "gameData.json"
     case music
     case gameOverScene = "GameOverScene"
+    case doorOpen = "door_open"
+    case healthMeter = "HealthMeter"
+}
+
+enum FontNames: String {
+    case AvenirNextBold = "AvenirNext-Bold"
+}
+
+enum AtlasNames: String {
+    case monsterGoblin = "monster_goblin"
+    case monsterSkeleton = "monster_skeleton"
+}
+
+enum TexturePrefixes: String {
+    case goblin =  "goblin_"
+    case skeleton = "skeleton_"
+}
+
+enum Sounds: String {
+    case key
+    case destroyed
+    case food
+    case treasure
+    case playerHit = "player_hit"
+    case playerDie = "player_die"
+    case monsterHit = "monster_hit"
+    case monsterDie = "monster_die"
 }

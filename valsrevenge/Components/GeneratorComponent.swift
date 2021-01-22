@@ -17,8 +17,6 @@ class GeneratorComponent: GKComponent {
     
     var isRunning = false
     
-    let spawnActionName = "spawnMonster"
-    
     override func didAddToEntity() {}
     
     func startGenerator() {
@@ -33,12 +31,12 @@ class GeneratorComponent: GKComponent {
             SKAction.repeatForever(sequence) :
             SKAction.repeat(sequence, count: maxMonsters)
         
-        componentNode.run(repeatAction, withKey: spawnActionName)
+        componentNode.run(repeatAction, withKey: Names.spawnMonster.rawValue)
     }
     
     func stopGenerator() {
         isRunning = false
-        componentNode.removeAction(forKey: spawnActionName)
+        componentNode.removeAction(forKey: Names.spawnMonster.rawValue)
     }
     
     func spawnMonsterEntity() {

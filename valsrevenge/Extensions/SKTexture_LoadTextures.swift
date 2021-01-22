@@ -8,10 +8,10 @@
 import SpriteKit
 
 extension SKTexture {
-    static func loadTextures(atlas: String, prefix: String,
+    static func loadTextures(atlas: AtlasNames, prefix: TexturePrefixes,
                              startsAt: Int, stopsAt: Int) -> [SKTexture]
     {
-        let textureAtlas = SKTextureAtlas(named: atlas)
-        return (startsAt ... stopsAt).map {i in textureAtlas.textureNamed("\(prefix)\(i)")}
+        let textureAtlas = SKTextureAtlas(named: atlas.rawValue)
+        return (startsAt ... stopsAt).map {i in textureAtlas.textureNamed("\(prefix.rawValue)\(i)")}
     }
 }

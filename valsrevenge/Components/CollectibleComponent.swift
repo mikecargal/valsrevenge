@@ -17,13 +17,13 @@ struct Collectible {
     let canDestroy: Bool
 
     init(type: GameObjectType,
-         collectSound: String,
-         destroySound: String,
+         collectSound: Sounds,
+         destroySound: Sounds,
          canDestroy: Bool = false)
     {
         self.type = type
-        self.collectSoundFile = collectSound
-        self.destroySoundFile = destroySound
+        self.collectSoundFile = collectSound.rawValue
+        self.destroySoundFile = destroySound.rawValue
         self.canDestroy = canDestroy
     }
 }
