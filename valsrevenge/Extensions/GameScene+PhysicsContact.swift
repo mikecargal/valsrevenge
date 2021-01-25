@@ -8,13 +8,18 @@
 import SpriteKit
 
 extension GameScene: SKPhysicsContactDelegate {
-    func match(_ contact: SKPhysicsContact, body: PhysicsBody) -> (match:SKNode, other:SKNode) {
+    func match(_ contact: SKPhysicsContact, body: PhysicsBody) -> (match: SKNode, other: SKNode) {
+        guard let nodeA = contact.bodyA.node,
+              let nodeB = contact.bodyB.node
+        else {
+            fatalError("Expected contact bodies to both have attached nodes")
+        }
         return contact.bodyA.categoryBitMask == body.categoryBitMask ?
-            (contact.bodyA.node!, contact.bodyB.node!) :
-            (contact.bodyB.node!, contact.bodyA.node!)
+            (nodeA, nodeB) :
+            (nodeB, nodeA)
     }
-    
-    func collisionOf(_ bodyA :PhysicsBody, _ bodyB: PhysicsBody) -> UInt32 {
+
+    func collisionOf(_ bodyA: PhysicsBody, _ bodyB: PhysicsBody) -> UInt32 {
         bodyA.categoryBitMask | bodyB.categoryBitMask
     }
 
@@ -23,7 +28,7 @@ extension GameScene: SKPhysicsContactDelegate {
         switch collision {
         // MARK: - Player | Collectible
 
-        case collisionOf(.player,.collectible):
+        case collisionOf(.player, .collectible):
             let (playerNode, collectible) = match(contact, body: .player)
 
             if let player = playerNode as? Player {
@@ -32,7 +37,7 @@ extension GameScene: SKPhysicsContactDelegate {
 
         // MARK: - Player | Door
 
-        case collisionOf(.player,.door):
+        case collisionOf(.player, .door):
             let (playerNode, door) = match(contact, body: .player)
 
             if let player = playerNode as? Player {
@@ -41,7 +46,7 @@ extension GameScene: SKPhysicsContactDelegate {
 
         // MARK: - Projectile | Collectible
 
-        case collisionOf(.projectile,.collectible):
+        case collisionOf(.projectile, .collectible):
             let (projectileNode, collectibleNode) = match(contact, body: .projectile)
             if let collectibleComponent = collectibleNode.entity?.component(ofType: CollectibleComponent.self) {
                 collectibleComponent.destroyedItem()
@@ -50,7 +55,7 @@ extension GameScene: SKPhysicsContactDelegate {
 
         // MARK: - Player | Monster
 
-        case collisionOf(.player,.monster):
+        case collisionOf(.player, .monster):
             let (playerNode, _) = match(contact, body: .player)
             if let healthComponent = playerNode.entity?.component(ofType: HealthComponent.self) {
                 healthComponent.updateHealth(-1, forNode: playerNode)
@@ -58,7 +63,7 @@ extension GameScene: SKPhysicsContactDelegate {
 
         // MARK: - Projectile | Monster
 
-        case collisionOf(.projectile,.monster):
+        case collisionOf(.projectile, .monster):
             let (monsterNode, _) = match(contact, body: .monster)
 
             if let healthComponent = monsterNode.entity?.component(ofType: HealthComponent.self) {
@@ -67,7 +72,7 @@ extension GameScene: SKPhysicsContactDelegate {
 
             // MARK: - Player | Platform
 
-        case collisionOf(.player,.exit):
+        case collisionOf(.player, .exit):
             let (playerNode, _) = match(contact, body: .player)
             // update the saved stats
             if let player = playerNode as? Player {
